@@ -184,3 +184,21 @@ test('brief rules: a name and at least one feature are required', async () => {
     assert.deepEqual(brief.features.map(f => f.id), ['overview-1', 'roadmap-2', 'cart', 'release-4'], 'feature ids never clash with the overview or roadmap maps');
     assert.equal(brief.slug, 'shop-app');
 });
+
+test('every new project carries the 20-point legal checklist, wired into features and release', () => {
+    const dir = path.join(temp(), 'legal');
+    assert.equal(node([INIT, dir, '--brief', BRIEF]).status, 0);
+    const list = fs.readFileSync(path.join(dir, '.loop/legal-checklist.md'), 'utf8');
+    const rows = list.match(/^\| (\d+) \| .+ \| todo \|/gm) || [];
+    assert.equal(rows.length, 20, 'twenty checks, all todo at the start');
+    for (const text of ['Privacy Policy', 'Terms & Conditions', 'Cookie Policy', 'Cookie consent', 'request deletion', 'third-party API', 'AI-generated content', 'Open-source', 'copyrighted assets', 'Attribution', 'UI assets', 'Age restrictions', 'high-risk advice', 'Refund', 'Marketing claims', 'Final legal audit']) assert.match(list, new RegExp(text), text);
+    assert.doesNotMatch(list, /\{\{\w+\}\}/, 'no placeholders left');
+    assert.ok(fs.existsSync(path.join(dir, 'Loop/LEGAL-CHECKLIST.md')), 'project copy of the rules');
+    assert.match(fs.readFileSync(path.join(dir, 'AGENTS.md'), 'utf8'), /## Legal checklist/);
+    assert.match(fs.readFileSync(path.join(dir, '.loop/tracks/first-open/spec.md'), 'utf8'), /legal-checklist\.md/);
+    assert.match(fs.readFileSync(path.join(dir, '.loop/tracks/release/spec.md'), 'utf8'), /Legal check 20/);
+    const atlas = JSON.parse(fs.readFileSync(path.join(dir, 'docs/app-map/atlas.json'), 'utf8'));
+    assert.equal(atlas.graphs.find(g => g.id === 'release').rows[0][0][0], 'legal-audit', 'release starts with the final legal audit');
+    assert.ok(atlas.graphs.find(g => g.id === 'quality-gates').rows.flat().some(n => n[0] === 'legal'), 'every feature passes the legal rows gate');
+    assert.equal(node(['--test'], dir).status, 0);
+});

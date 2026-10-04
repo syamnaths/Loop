@@ -42,6 +42,10 @@ Give approve-style options (A recommended / B / C) only for decisions that chang
 - Measure before claiming sizes, speed or savings. Device feel and sound need a device check.
 - Consent, privacy and safety first for sensitive features; never store private choices.
 
+## Legal checklist
+
+`.loop/legal-checklist.md` holds the 20 legal checks (rules in `Loop/LEGAL-CHECKLIST.md`). When a map collects personal data, adds cookies or trackers, a third-party API, a package, assets, AI content, payments, advice or marketing text, update those rows in the same change. The release needs check 20 (final legal audit) done. Loop drafts legal pages and flags lawyer items; the owner approves legal text before it is published. Never claim the product is legally compliant.
+
 ## Release boundary
 
-Commit validated checkpoints locally. The owner approves every push to production, every deploy and every store release (see the `release` map). If the agent cannot push, give one copy-paste command and confirm the remote afterwards.
+Commit validated checkpoints locally. The owner approves every push to production, every deploy, every store release (see the `release` map) and every published legal page. If the agent cannot push, give one copy-paste command and confirm the remote afterwards.

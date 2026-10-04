@@ -110,7 +110,7 @@ Do not force worktrees for tiny changes or environments where they increase risk
 Review in this order:
 
 1. `SPEC_COMPLIANCE` — required behavior, acceptance criteria, scope, exclusions, and evidence.
-2. `QUALITY_AND_RISK` — correctness, maintainability, security, privacy, performance, accessibility, operations, and tests.
+2. `QUALITY_AND_RISK` — correctness, maintainability, security, privacy, legal (the trigger table in `LEGAL-CHECKLIST.md`), performance, accessibility, operations, and tests.
 
 Critical or high-severity findings block completion. Record medium and low findings with disposition. A model or sub-agent report is advisory evidence; the supervisor verifies the actual diff, files, and test output.
 

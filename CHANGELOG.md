@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.3 — legal checklist
+
+- New `LEGAL-CHECKLIST.md`: 20 legal checks in five groups (legal pages, personal data, third parties and licences, users and selling, final audit), with status values `todo` / `done` / `n/a` / `lawyer` / `blocked`, a trigger table and plain rules.
+- Every new or adopted project gets `.loop/legal-checklist.md` (20 rows, a data list, a third-party list, lawyer questions, owner decisions) and a project copy of the rules.
+- Each feature track has a legal line; the quality-gates map has a "Legal rows" step; a feature is not delivered while a legal row it touches is `todo`.
+- The release map starts with "Final legal audit" (check 20); the release track needs it done and the owner's OK on legal pages.
+- `loop.md`: legal added to review, product rules, approval gates (publishing legal text, releasing with `lawyer` rows) and completion. Loop drafts and flags; it never claims legal compliance.
+- Previous versions of changed files are kept in `archive/v0.4.2/`.
+
 ## 0.4.2 — ask, then build
 
 - Loop asks the start questions itself (one message) and starts building the first map right away when name, platform and a feature are known. No separate approval step; it still stops at approval gates.

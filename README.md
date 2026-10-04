@@ -79,7 +79,8 @@ Under a feature you can add indented lines: `fails: ...` (what happens on error)
 | "Show status." | Tells you how many maps are delivered and what is next |
 | "Add a feature: ..." | Adds a new planned map and track, then builds it in order |
 | "Change ... in the ... screen." | Updates the map first, then the code, tests and docs |
-| "Prepare the release." | Works through the release map and stops before publishing for your OK |
+| "Prepare the release." | Runs the final legal audit, works through the release map and stops before publishing for your OK |
+| "Show legal status." | Shows the legal checklist count and only the items that need you or a lawyer |
 
 ### Check progress yourself
 
@@ -104,6 +105,7 @@ Open the project folder in your agent and say **"Resume with Loop."** The `CURRE
 | `HANDOFF.md` | One `CURRENT RESUME` block: status and the exact next action |
 | `.loop/workflow.md`, `.loop/tracks/<map>/spec.md` | Delivery path, modes, and a done-checklist per feature and for release |
 | `.loop/platform.md` | Chosen platform: stack, test commands, proof ladder, rules, release path |
+| `.loop/legal-checklist.md` | The 20 legal checks for this project, with status and proof |
 | `docs/app-map/` | Atlas data, builder, status, atlas check, interactive `index.html`, fix queue |
 | `docs/project-brief.md`, `docs/START.md` | The brief, your answers and open questions |
 | `design/template-page/` | Your basic template page, when given |
@@ -138,12 +140,13 @@ Without `--platform`, Loop guesses from the files and tells you. It adds the atl
 | `EFFICIENT-WORKFLOW.md` | Bounded context, modes, cost honesty |
 | `DELIVERY-WORKFLOW.md` | Tracks, reviews, debugging, release |
 | `SECURITY.md` | Security verification standard |
+| `LEGAL-CHECKLIST.md` | The 20 legal checks every project goes through |
 | `MODEL-ROUTING.md`, `LOCAL-MODEL-ROUTING.md`, `config/`, `scripts/codex_model_router.py` | Optional model routing |
 | `start/START.md`, `start/template-page/` | The fill-in form and the folder for your basic template page |
 | `scripts/loop-init.mjs`, `starter/` | The atlas-first project starter (`starter/platforms.mjs` holds the platform profiles) |
 | `examples/` | Example briefs for a web app and an Android app |
 | `tests/` | Checks for the router, policy wiring and the starter |
-| `archive/v0.3.1/` | The previous versions of changed files |
+| `archive/v0.3.1/`, `archive/v0.4.2/` | The previous versions of changed files |
 | `CHANGELOG.md` | What changed in each version |
 
 ## Check Loop itself

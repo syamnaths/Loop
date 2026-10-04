@@ -3,9 +3,9 @@ name: loop
 description: "Use when the user says 'Use Loop for this project', 'Apply Loop', 'Resume with Loop', 'Build the next atlas map', or asks for Loop project orchestration. Asks which platform to build for at the start, then starts new projects atlas-first with loop-init.mjs, adopts existing projects, builds one atlas map at a time with proof, and keeps a single CURRENT RESUME handoff."
 ---
 
-# Loop orchestration (v0.4, atlas-first)
+# Loop orchestration (v0.4.3, atlas-first)
 
-Apply `loop.md` from the project-local `Loop/` folder when present, otherwise from the plugin root. Companion files: `ATLAS-FIRST.md` (atlas format and build loop), `OWNER-COMMUNICATION.md`, `EFFICIENT-WORKFLOW.md`, `DELIVERY-WORKFLOW.md`, `SECURITY.md`, `MODEL-ROUTING.md`. The project copy may be newer than the installed plugin; do not edit the installed cache.
+Apply `loop.md` from the project-local `Loop/` folder when present, otherwise from the plugin root. Companion files: `ATLAS-FIRST.md` (atlas format and build loop), `OWNER-COMMUNICATION.md`, `EFFICIENT-WORKFLOW.md`, `DELIVERY-WORKFLOW.md`, `SECURITY.md`, `LEGAL-CHECKLIST.md` (20 legal checks), `MODEL-ROUTING.md`. The project copy may be newer than the installed plugin; do not edit the installed cache.
 
 ## Invocation
 
@@ -39,11 +39,14 @@ Read `AGENTS.md`, `HANDOFF.md` (CURRENT RESUME only), `.loop/platform.md`, then 
 2. Confirm the map's steps are still right; edit the map first if not (`planned` → `building`).
 3. Build only that map's behaviour. Add or update a test that proves it.
 4. Prove at the strongest level in `.loop/platform.md` (for example browser, emulator, simulator, staging, device). Say which level you reached.
+   Legal: if the map collects data, adds cookies or trackers, an API, a package, assets, AI content, payments, advice or marketing text, update those rows in `.loop/legal-checklist.md` (trigger table in `LEGAL-CHECKLIST.md`). No touched row may stay `todo`.
 5. Flip the map to `delivered` with real `file:line` sources. The atlas build refuses fake or missing sources.
 6. Run the product tests and the atlas check, update the CURRENT RESUME block (progress from the atlas status), commit with a checkpoint id.
 7. Report to the owner in plain words with a screenshot when visual, then repeat.
 
-Release, push, spending, data deletion and user-visible content changes stay behind the approval gates in `loop.md`. When the owner must push, give one copy-paste command and confirm with `git fetch` afterwards.
+On the first map, mark every legal check `todo` or `n/a` (with reason) from the brief, and ask the owner once which countries the users are in. Before release, run check 20 (final legal audit): no `todo` or `blocked` rows, and an owner A/B/C decision on every `lawyer` row. Loop drafts legal pages; it never claims legal compliance.
+
+Release, push, spending, data deletion, publishing legal text and user-visible content changes stay behind the approval gates in `loop.md`. When the owner must push, give one copy-paste command and confirm with `git fetch` afterwards.
 
 ## Routing
 

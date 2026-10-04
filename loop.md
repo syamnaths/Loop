@@ -1,4 +1,4 @@
-# Loop — project collaboration policy (v0.4)
+# Loop — project collaboration policy (v0.4.3)
 
 Loop is a local-first way to plan, build, check and hand over software with an AI agent and a human owner. Version 0.4 makes the **flow atlas** the centre of every project: new projects start from an atlas plan, and every feature is built to its map and closed by flipping that map to delivered. Loop is **platform-independent**: the platform (web, Android, iPhone, cross-platform mobile, desktop, backend, command-line, other, or several) is chosen by the owner or coder at the start and shapes the proof, rules and release steps. The method comes from the Lite meditation PWA, where it carried dozens of features across five languages without losing track.
 
@@ -11,6 +11,7 @@ Loop is a local-first way to plan, build, check and hand over software with an A
 | [EFFICIENT-WORKFLOW.md](./EFFICIENT-WORKFLOW.md) | Bounded context, execution modes, routing evidence, cost honesty. |
 | [DELIVERY-WORKFLOW.md](./DELIVERY-WORKFLOW.md) | Tracks, specs, reviews, debugging, release steps. |
 | [SECURITY.md](./SECURITY.md) | Full security verification standard (OWASP-based). |
+| [LEGAL-CHECKLIST.md](./LEGAL-CHECKLIST.md) | The 20 legal checks (privacy, terms, cookies, consent, user data rights, licences, assets, age, disclaimers, refunds, claims, final audit). Every project tracks them in `.loop/legal-checklist.md`. |
 | [MODEL-ROUTING.md](./MODEL-ROUTING.md), [LOCAL-MODEL-ROUTING.md](./LOCAL-MODEL-ROUTING.md) | Optional model routing. Only when relevant. |
 | [README.md](./README.md) | Starting a new project with `scripts/loop-init.mjs`. |
 
@@ -48,7 +49,7 @@ Do not restart discovery. Read the newest request, `AGENTS.md`, the `CURRENT RES
 3. Pick the cheapest safe execution mode ([EFFICIENT-WORKFLOW.md](./EFFICIENT-WORKFLOW.md)).
 4. Update the map first when behaviour will change (`planned`/`building`).
 5. Make the smallest coherent change. For bugs: reproduce, test one hypothesis at a time; after three failed hypotheses, stop and question the assumptions.
-6. Review scope first, then correctness, accessibility, privacy, security and performance.
+6. Review scope first, then correctness, accessibility, privacy, security, legal and performance. If the change collects data, adds cookies or trackers, an API, a package, assets, AI content, payments, advice or marketing text, update the matching rows of `.loop/legal-checklist.md` ([LEGAL-CHECKLIST.md](./LEGAL-CHECKLIST.md)).
 7. Run proportionate checks and look at the output. Visual work gets screenshots at the platform's real size (phone browser, emulator, simulator or desktop window).
 8. Close the loop: map to `delivered` with source references, track, fix queue, `HANDOFF.md`, version and cache bumps, commit.
 9. Report to the owner in plain words with what is verified and what is not.
@@ -64,6 +65,7 @@ These apply to every project unless the owner says otherwise.
 - **No raw developer text for users.** No `alert()` with stack traces or "check console". Use a calm in-app message, translated; log technical detail quietly.
 - **Measure before claiming.** Sizes, timings and savings only from real measurements. Sound, feel and device performance need a listening or device check; say when nobody has done it.
 - **Plans are not features.** Ideas go to `FIX-QUEUE.md` or `planned` maps, never into delivered maps or release notes.
+- **Legal checks travel with the feature.** A feature that touches personal data, cookies, third parties, licences, assets, payments, advice or claims is not delivered while its legal rows are `todo`. Loop drafts legal pages and flags `lawyer` items; it never claims the product is legally compliant.
 - **Removal is a change.** Removing a feature updates its map, tests, locale keys and docs too.
 
 ## 5. Evidence levels
@@ -91,7 +93,7 @@ The proof ladder for the chosen platform is in the project's `.loop/platform.md`
 
 ## 7. Approval gates
 
-Ask first before: deleting or overwriting material data; publishing or deploying; sending messages or creating accounts; spending money; using credentials or systems outside the project; installing packages that need the network; major architecture or design-system commitments; choosing a public name.
+Ask first before: deleting or overwriting material data; publishing or deploying; publishing legal text (privacy, terms, cookie, refund pages, disclaimers); releasing with any `lawyer` row in the legal checklist; sending messages or creating accounts; spending money; using credentials or systems outside the project; installing packages that need the network; major architecture or design-system commitments; choosing a public name.
 
 Everything else that is local, reversible and within the request goes ahead without asking.
 
@@ -112,7 +114,7 @@ Everything else that is local, reversible and within the request goes ahead with
 
 ## 10. Completion
 
-A release is complete when every map in its scope is `delivered`, required checks pass on the integrated source, docs and handoff are current, cleanup passed, and nothing blocks within scope. The final report gives: what shipped, how to run it locally, the checks and their evidence levels, what is not verified, and the release command or the confirmed remote state. Production readiness and security clearance are reported separately.
+A release is complete when every map in its scope is `delivered`, required checks pass on the integrated source, the legal checklist final audit (check 20) is done with no `todo` or `blocked` rows and an owner decision on every `lawyer` row, docs and handoff are current, cleanup passed, and nothing blocks within scope. The final report gives: what shipped, how to run it locally, the checks and their evidence levels, what is not verified, and the release command or the confirmed remote state. Production readiness, security clearance and legal status are reported separately. Legal status is the checklist count (done / n/a / blocked / lawyer), never a claim of compliance.
 
 ## 11. Policy maintenance
 

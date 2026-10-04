@@ -38,5 +38,6 @@ Escalate when scope grows; de-escalate only at a clean checkpoint.
 - Map `delivered` with real `source` refs; `{{cmdAtlas}}` and `{{cmdCheck}}` pass.
 - Behaviour tests added and passing (`{{projectTest}}`); proof level stated.
 - All languages updated; {{versionRule}}
+- Legal rows touched by the change updated in `.loop/legal-checklist.md` (none left `todo`).
 - Track checklist ticked; `FIX-QUEUE.md` and `HANDOFF.md` current.
 - Owner shown the result ({{visualProof}}) with verified vs not verified stated.

@@ -36,6 +36,19 @@ class EfficiencyContract(unittest.TestCase):
         self.assertIn("platform.md", policy)
         self.assertIn("Never pick the platform for the owner", policy)
 
+    def test_legal_checklist_is_wired_in(self):
+        rules = (ROOT / "LEGAL-CHECKLIST.md").read_text()
+        for n in range(1, 21):
+            with self.subTest(check=n):
+                self.assertIn(f"{n}. **", rules)
+        self.assertIn("never says the product is \"legally compliant\"", rules)
+        for name in ("loop.md", "skills/loop/SKILL.md", "starter/templates/AGENTS.md"):
+            with self.subTest(name=name):
+                self.assertIn("legal-checklist.md", (ROOT / name).read_text())
+        self.assertIn("publishing legal text", (ROOT / "loop.md").read_text())
+        self.assertIn("LEGAL-CHECKLIST.md", (ROOT / "scripts" / "loop-init.mjs").read_text())
+        self.assertTrue((ROOT / "starter" / "templates" / "legal-checklist.md").exists())
+
     def test_safety_and_truth_boundaries_remain_explicit(self):
         policy = (ROOT / "EFFICIENT-WORKFLOW.md").read_text()
         for requirement in (
