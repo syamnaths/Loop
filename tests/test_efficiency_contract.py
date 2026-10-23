@@ -49,6 +49,21 @@ class EfficiencyContract(unittest.TestCase):
         self.assertIn("LEGAL-CHECKLIST.md", (ROOT / "scripts" / "loop-init.mjs").read_text())
         self.assertTrue((ROOT / "starter" / "templates" / "legal-checklist.md").exists())
 
+    def test_resource_guard_and_pause_rules(self):
+        policy = (ROOT / "loop.md").read_text()
+        for text in ("Rules by task profile", "Unknown readings still block heavy work", "A known warning blocks both",
+                     "Unknown is never safe", "Thermal Warning Level: 0", "CPU_Speed_Limit = 100",
+                     "has been recorded", "Pause report", "ETA unknown", "Report sync blockers separately",
+                     "A docs fix does not update a stored goal"):
+            with self.subTest(text=text):
+                self.assertIn(text, policy)
+        owner = (ROOT / "OWNER-COMMUNICATION.md").read_text()
+        for text in ("Blocked by:", "Latest reading:", "Still allowed:", "Restarts when:", "ETA:"):
+            with self.subTest(text=text):
+                self.assertIn(text, owner)
+        self.assertIn("Pause / blockers", (ROOT / "starter" / "templates" / "HANDOFF.md").read_text())
+        self.assertIn("Stale stored goal", (ROOT / "tests" / "loop-skill-scenarios.md").read_text())
+
     def test_safety_and_truth_boundaries_remain_explicit(self):
         policy = (ROOT / "EFFICIENT-WORKFLOW.md").read_text()
         for requirement in (

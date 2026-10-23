@@ -66,6 +66,9 @@ Write every step as the user experiences it, with the real guard, default, exit 
 - Never mark `delivered` from a plan, a mock or a passing wording test. Notes must say which evidence exists: source review, unit test, browser / emulator / simulator test, staging, device check.
 - Do not invent flows to have something to draw. A non-flow change only needs a check that the atlas is still accurate.
 - When a feature is removed, remove or rewrite its map, and say "removed (owner: reason)" in notes so history is clear.
+- Separate fact from guess. A step taken straight from the source needs no label; a step you inferred (not yet read in code) ends with `(inferred)` until it is checked.
+- Look in the atlas and the track before searching files. Read source only for the map steps the task touches.
+- Keep source references pointing at the code they describe. The atlas status command reports a reference that is out of range or lands on a blank or closing line; re-point it when code moves.
 - Keep the atlas a development tool: never precache or ship it inside the product bundle or app package.
 
 ## Existing projects

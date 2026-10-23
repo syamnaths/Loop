@@ -112,7 +112,19 @@ Review in this order:
 1. `SPEC_COMPLIANCE` — required behavior, acceptance criteria, scope, exclusions, and evidence.
 2. `QUALITY_AND_RISK` — correctness, maintainability, security, privacy, legal (the trigger table in `LEGAL-CHECKLIST.md`), performance, accessibility, operations, and tests.
 
-Critical or high-severity findings block completion. Record medium and low findings with disposition. A model or sub-agent report is advisory evidence; the supervisor verifies the actual diff, files, and test output.
+Approve a change when it clearly improves the code and meets the spec, even if it is not perfect; polish goes to the fix queue. Critical or high-severity findings block completion. Record medium and low findings with disposition. A model or sub-agent report is advisory evidence; the supervisor verifies the actual diff, files, and test output.
+
+### Receiving review
+
+Treat every review comment (owner, reviewer or model) as a claim to check, not an order to apply blindly. Check it against the code and the spec. Fix it when it is right; when it is wrong or out of scope, say why in one line. Never agree just to close a comment.
+
+### Second opinion for high-risk changes
+
+For changes where a mistake is costly — security, payments, personal data, data migration or deletion, a major architecture choice — get one independent review before completion:
+
+- The reviewer starts fresh: a different model when one is available, otherwise a new sub-agent without the implementer's context. Give it the spec, the diff and one lens (for example security, data safety or accessibility).
+- Where the reviewer and implementer disagree, the supervisor checks the code and decides; open disagreements go to the owner as an A/B choice.
+- This is opt-in for routine work. Running several models on every task multiplies cost (often about 3x) with little gain; say the cost before using it widely.
 
 ## Verification before completion
 

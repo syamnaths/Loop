@@ -34,3 +34,24 @@ Loop additionally defines local-first context routing, handoff compaction and ar
 - Host-native dialogs, hooks, commands, and session-start activation depend on capabilities exposed by the installing host.
 
 Do not claim Loop is categorically better from feature coverage alone. Compare representative project outcomes: requirement accuracy, task success, defects, review findings, rework, context/tokens, latency, cost, recovery quality, and user corrections.
+
+## Review 2026-10-08 (Loop 0.4.4)
+
+Four popular agent plugins were checked against Loop. Only ideas Loop did not already have were added.
+
+| Source | Already in Loop | Added in 0.4.4 | Not adopted, and why |
+| --- | --- | --- | --- |
+| [Superpowers](https://skills.sh/obra/superpowers) | Discovery before code, plans, test-first, root-cause debugging, worktrees, two-stage review, fresh verification before claims, parallel agents for independent work | Receiving review: check each comment before applying it (`DELIVERY-WORKFLOW.md`) | One-question-at-a-time brainstorming: Loop asks all start questions in one message on purpose |
+| Karpathy guidelines ([summary](https://pasqualepillitteri.it/en/news/1872/karpathy-claude-md-trending-github-llm-coding)) | Ask when unclear, smallest coherent change, preserve unrelated work | Craft rules: say your assumption, simplest thing that works, surgical edits, done means a check passes (`loop.md` §3) | — |
+| i-have-adhd ([summary](https://chudi.dev/blog/claude-adhd-plugin)) | Result first, plain words, no padding, honest errors | Focus-friendly replies: answer first, one topic, status line, numbered steps with minutes, lists of five or fewer, show the win, one next step (`OWNER-COMMUNICATION.md`) | — |
+| Claude Octopus ([docs](https://www.mintlify.com/nyldn/claude-octopus)) | Phase gates (spec → plan → build → review), evidence gates, model routing | Second opinion for high-risk changes: fresh independent reviewer with one lens, disagreements to the owner (`DELIVERY-WORKFLOW.md`) | Three models on every task (about 3x cost); numeric "quality scores" (Loop reports evidence levels, not invented percentages); dozens of fixed personas |
+
+## Review 2026-10-08 (Loop 0.4.5)
+
+| Source | Already in Loop | Added in 0.4.5 | Not adopted, and why |
+| --- | --- | --- | --- |
+| [Ponytail](https://pasqualepillitteri.it/en/news/5720/ponytail-ai-skill-less-code) | Simplest thing that works, no speculative code (0.4.4) | Reuse-first ladder (needed? standard library? platform? existing package? then code), never trim the safety net, `Known limit:` markers listed in the fix queue (`loop.md` §3) | Modes and "ultra" one-liner push; lines-of-code targets |
+| [OmniRoute](https://agentpedia.codes/blog/omniroute-ai-gateway-routing-setup-guide) | Capability routing, health states, bounded fallback, budgets (`MODEL-ROUTING.md`) | Gateway safety: loopback bind, keys in the gateway only, no body logging, fail-closed safety checks, short fallback chains with cooldown, risky modes off (`MODEL-ROUTING.md`) | Running a gateway by default; stealth / interception modes |
+| [Graphify](https://www.augmentcode.com/learn/graphify-knowledge-graph-codebase-skill) | Flow atlas with `file:line` sources, bounded symbol maps, atlas-before-files | Fact vs guess `(inferred)` label, atlas-first lookup rule, atlas status reports weak or out-of-range references (`ATLAS-FIRST.md`, `atlas-status.mjs`) | A second code knowledge graph and commit hooks: the atlas plus a symbol map covers Loop's needs without another tool |
+| [agent-skills](https://dev.to/dublecc/claude-code-skills-in-practice-dissecting-addyosmaniagent-skills-2hhd) | Spec → plan → build → verify → review → ship gates, test-first, debugging, surfaced assumptions, push-back, review axes | Track Boundaries (Always / Ask first / Never) in every new track; find out why odd code exists before removing it; check the real docs; approve when the change clearly improves the code (`loop-init.mjs`, `loop.md`, `DELIVERY-WORKFLOW.md`) | 24 separate skill files; Loop keeps one policy plus companions |
+

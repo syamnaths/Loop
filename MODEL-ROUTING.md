@@ -176,6 +176,17 @@ RED    unavailable, deprecated, repeated failures, or no usable quota
 
 Do not treat a static catalog as proof that a particular account/model request will succeed. Request telemetry and account-specific rate-limit signals are the operational evidence.
 
+## Gateway safety
+
+When a local or hosted AI gateway (one endpoint in front of many providers) carries Loop's requests:
+
+- Bind it to `127.0.0.1` and require a key, even on a home network. Keep the admin login on.
+- Keep provider keys only in the gateway's secret store, never in the project or handoff.
+- Turn off request and response body logging; usage and cost counts are enough. Treat any log folder as sensitive.
+- Safety checks (prompt-injection guards, content filters) must fail closed: when the check itself errors, block the request.
+- Keep fallback chains short and deliberate. Put one failing account or model on cooldown instead of cycling through every key.
+- Cloud sync, traffic interception and provider "stealth" modes stay off unless the owner approves them; they change the data boundary and may break provider terms.
+
 ## Selection algorithm
 
 ```text

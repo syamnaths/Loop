@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.4.6 — honest guards and pauses
+
+Lessons from a resource-guard fix (thermal rules that differed between the guard and the goal).
+
+- `loop.md` §6 new "Resource guards and pauses": rules by task profile (approved light work may run when its checks pass; unknown blocks heavy work; a known warning blocks both); unknown is never "safe"; a clear state needs a numeric reading ("has not been recorded" stays unknown); guard tests cover light and heavy for clear, warning and unknown; five-part pause report with measured or "unknown" ETA.
+- `loop.md` §9: one rule, one wording everywhere (goal, `AGENTS.md`, `.loop/`, tracks, handoff); a copy that cannot be edited, such as a stored goal, is its own sync blocker, and the goal is not reported as resumed.
+- `OWNER-COMMUNICATION.md`: five-line pause message. `EFFICIENT-WORKFLOW.md` and the skill point to the new rules. `HANDOFF.md` template has a "Pause / blockers" line.
+- Four new behaviour scenarios and a policy test. Stale atlas references were already covered in 0.4.5 (`atlas-status.mjs` reports weak references).
+- Proper `.gitignore`: the project template now covers secrets and keys (keeps `.env.example`), dependencies, build output, test and browser output, logs, OS and editor files, and local databases, while keeping the Loop record (`.loop/`, `docs/app-map/`, `design/`, `Loop/`, `HANDOFF.md`, `AGENTS.md`). The Loop folder has its own `.gitignore` (caches, `*.tgz`, `_to_delete/`, `.DS_Store`). New starter test.
+- Previous versions of changed files are kept in `archive/v0.4.5/`.
+
+## 0.4.5 — reuse first, honest atlas
+
+Ideas from Ponytail, OmniRoute, Graphify and agent-skills; only what Loop lacked. Details and what was skipped: `FRAMEWORK-BENCHMARK.md`.
+
+- `loop.md` §3 craft rules: reuse-first ladder before new code, never trim the safety net, `Known limit:` markers listed in `FIX-QUEUE.md`, find out why odd code exists before removing it, check the real docs.
+- `DELIVERY-WORKFLOW.md`: approve a change that clearly improves the code; polish goes to the fix queue.
+- `MODEL-ROUTING.md`: gateway safety (loopback, keys, no body logging, fail-closed checks, short fallback with cooldown, risky modes off).
+- `ATLAS-FIRST.md`: fact vs guess `(inferred)` label, atlas before file search, keep references pointing at real code. `atlas-status.mjs` now reports out-of-range and weak (blank or closing-line) references.
+- New tracks get a Boundaries section (Always / Ask first / Never, using the brief's must-not list).
+- New test: tracks carry boundaries and atlas status reports weak references. Five more behaviour scenarios. Previous versions of changed files are kept in `archive/v0.4.4/`.
+
+## 0.4.4 — focus and craft
+
+Ideas from four agent plugins (Superpowers, Karpathy guidelines, i-have-adhd, Claude Octopus); only what Loop lacked. Details and what was skipped: `FRAMEWORK-BENCHMARK.md`.
+
+- `loop.md` §3: craft rules for every change — say your assumption, simplest thing that works, surgical edits, done means a check passes.
+- `OWNER-COMMUNICATION.md`: focus-friendly replies — answer first, one topic, status line, numbered steps with minutes, lists of five or fewer, show the win, flat errors, one next step.
+- `DELIVERY-WORKFLOW.md`: receiving review (check each comment before applying it) and an opt-in second opinion for high-risk changes (fresh reviewer, one lens, disagreements to the owner).
+- `tests/loop-skill-scenarios.md`: five new behaviour scenarios for these rules.
+- Previous versions of changed files are kept in `archive/v0.4.3/`.
+
 ## 0.4.3 — legal checklist
 
 - New `LEGAL-CHECKLIST.md`: 20 legal checks in five groups (legal pages, personal data, third parties and licences, users and selling, final audit), with status values `todo` / `done` / `n/a` / `lawyer` / `blocked`, a trigger table and plain rules.

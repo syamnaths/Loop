@@ -146,7 +146,7 @@ Without `--platform`, Loop guesses from the files and tells you. It adds the atl
 | `scripts/loop-init.mjs`, `starter/` | The atlas-first project starter (`starter/platforms.mjs` holds the platform profiles) |
 | `examples/` | Example briefs for a web app and an Android app |
 | `tests/` | Checks for the router, policy wiring and the starter |
-| `archive/v0.3.1/`, `archive/v0.4.2/` | The previous versions of changed files |
+| `archive/v0.3.1/`, `archive/v0.4.2/`, `archive/v0.4.3/`, `archive/v0.4.4/` | The previous versions of changed files |
 | `CHANGELOG.md` | What changed in each version |
 
 ## Check Loop itself

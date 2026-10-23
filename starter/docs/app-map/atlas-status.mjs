@@ -19,8 +19,13 @@ const issues = [];
 for (const g of graphs) {
     if (status(g) !== 'planned' && !g.source) issues.push(`${g.id}: ${status(g)} but has no source references`);
     for (const ref of g.source ? g.source.split('; ') : []) {
-        const file = ref.split(':')[0];
-        if (!fs.existsSync(path.resolve(root, file))) issues.push(`${g.id}: source missing ${ref}`);
+        const [file, line = '1'] = ref.split(':');
+        const full = path.resolve(root, file);
+        if (!fs.existsSync(full)) { issues.push(`${g.id}: source missing ${ref}`); continue; }
+        const lines = fs.readFileSync(full, 'utf8').split('\n');
+        const text = (lines[+line - 1] ?? '').replace(/[\s{}()\[\];,]/g, '');
+        if (+line > lines.length) issues.push(`${g.id}: line out of range ${ref}`);
+        else if (+line > 1 && text.length < 3) issues.push(`${g.id}: weak reference ${ref} (blank or closing line; re-point it to the code it describes)`);
     }
     const track = path.resolve(root, '.loop/tracks', g.id);
     if (status(g) !== 'delivered' && g.group === (meta.featureGroup || 'Features') && !fs.existsSync(track)) issues.push(`${g.id}: no track folder at .loop/tracks/${g.id}`);

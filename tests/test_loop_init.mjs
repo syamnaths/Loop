@@ -202,3 +202,30 @@ test('every new project carries the 20-point legal checklist, wired into feature
     assert.ok(atlas.graphs.find(g => g.id === 'quality-gates').rows.flat().some(n => n[0] === 'legal'), 'every feature passes the legal rows gate');
     assert.equal(node(['--test'], dir).status, 0);
 });
+
+test('tracks carry boundaries, and atlas status reports weak or out-of-range source references', () => {
+    const dir = path.join(temp(), 'bounds');
+    assert.equal(node([INIT, dir, '--brief', BRIEF]).status, 0);
+    const spec = fs.readFileSync(path.join(dir, '.loop/tracks/first-open/spec.md'), 'utf8');
+    assert.match(spec, /## Boundaries\n\n- \*\*Always:\*\*[\s\S]*- \*\*Ask first:\*\*[\s\S]*- \*\*Never:\*\*/);
+    fs.writeFileSync(path.join(dir, 'probe.txt'), 'real code\n\n}\n');
+    fs.appendFileSync(path.join(dir, 'docs/app-map/atlas-data.mjs'), "\ngraphs[0].status = 'delivered'; graphs[0].source = 'probe.txt:1; probe.txt:2; probe.txt:3; probe.txt:9';\n");
+    const out = node([path.join(dir, 'docs/app-map/atlas-status.mjs')], dir);
+    assert.equal(out.status, 1);
+    assert.match(out.stdout, /weak reference probe\.txt:2/);
+    assert.match(out.stdout, /weak reference probe\.txt:3/);
+    assert.match(out.stdout, /line out of range probe\.txt:9/);
+    assert.doesNotMatch(out.stdout, /probe\.txt:1\b/);
+});
+
+test('new projects get a full .gitignore that keeps the Loop record', () => {
+    const dir = path.join(temp(), 'gi');
+    assert.equal(node([INIT, dir, '--brief', BRIEF]).status, 0);
+    const gi = fs.readFileSync(path.join(dir, '.gitignore'), 'utf8');
+    for (const line of ['.env', '!.env.example', '*.pem', 'node_modules/', 'dist/', 'coverage/', 'test-results/', '.DS_Store', '__pycache__/']) {
+        assert.ok(gi.split('\n').includes(line), `${line} is ignored`);
+    }
+    for (const kept of ['.loop/', 'docs/app-map/', 'design/', 'Loop/', 'HANDOFF.md', 'AGENTS.md']) {
+        assert.ok(!gi.split('\n').includes(kept), `${kept} is not ignored`);
+    }
+});

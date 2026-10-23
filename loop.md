@@ -1,4 +1,4 @@
-# Loop — project collaboration policy (v0.4.3)
+# Loop — project collaboration policy (v0.4.5)
 
 Loop is a local-first way to plan, build, check and hand over software with an AI agent and a human owner. Version 0.4 makes the **flow atlas** the centre of every project: new projects start from an atlas plan, and every feature is built to its map and closed by flipping that map to delivered. Loop is **platform-independent**: the platform (web, Android, iPhone, cross-platform mobile, desktop, backend, command-line, other, or several) is chosen by the owner or coder at the start and shapes the proof, rules and release steps. The method comes from the Lite meditation PWA, where it carried dozens of features across five languages without losing track.
 
@@ -54,6 +54,21 @@ Do not restart discovery. Read the newest request, `AGENTS.md`, the `CURRENT RES
 8. Close the loop: map to `delivered` with source references, track, fix queue, `HANDOFF.md`, version and cache bumps, commit.
 9. Report to the owner in plain words with what is verified and what is not.
 
+### Craft rules for every change
+
+- **Say your assumption.** When you go ahead on a reasonable reading, state the assumption in one line. When two readings would build different things, ask first (section 2).
+- **Simplest thing that works.** No features, options, abstractions or error handling for cases that cannot happen unless the task needs them. If the change could be much shorter, make it shorter. Before writing new code, stop at the first step that fits:
+  1. Is it needed now? If not, skip it and say so in one line.
+  2. Does the language's standard library do it?
+  3. Does the platform do it natively (a built-in input, a database rule, an OS setting)?
+  4. Does a package the project already has do it? Add a new package only with a reason (approval gate when it needs the network).
+  5. Only then write the smallest code that works.
+- **Never trim the safety net.** Simplicity never removes input checks at trust boundaries, error handling that prevents data loss, security, accessibility or privacy protections.
+- **Mark deliberate shortcuts.** When you knowingly take a simpler route with a limit, leave a short code comment starting `Known limit:` and add a line to `FIX-QUEUE.md`, so it is found later.
+- **Surgical edits.** Before removing or changing odd-looking code, find out why it exists (history, tests, map notes); remove it only when the reason is gone. Touch only the lines the task needs. Do not reformat, rename or refactor nearby code. Remove only what your own change made unused. Note other problems in `FIX-QUEUE.md` instead of fixing them on the side.
+- **Check the real docs.** For an API, package or platform feature you are not sure about, read its current official documentation or the installed version's source; do not code from memory.
+- **Done means a check passes.** Before coding, turn the task into a check (a test, a command or a screenshot) that fails or is missing now and will pass when the work is right. Loop until it passes.
+
 ## 4. Product rules learned the hard way
 
 These apply to every project unless the owner says otherwise.
@@ -91,6 +106,16 @@ The proof ladder for the chosen platform is in the project's `.loop/platform.md`
 - No heavy infrastructure (Docker, microservices, new frameworks) without a measured reason and owner approval.
 - Security follows [SECURITY.md](./SECURITY.md) at the level the project needs.
 
+### Resource guards and pauses
+
+When a project or host uses a resource guard (CPU, memory, disk, thermal, battery, quota or similar checks before work runs):
+
+- **Rules by task profile.** Each rule says what it allows for `light` work and for `heavy` work. Explicitly approved light work may run when the readings it depends on pass, even if another reading is unknown. Unknown readings still block heavy work. A known warning blocks both.
+- **Unknown is never safe.** Missing, empty, unreadable or stale telemetry is `unknown`. Never describe it as "cool", "clear", "safe" or "no problem".
+- **A clear state needs a number.** A positive "no warning" state needs numeric evidence (for example macOS `pmset -g therm`: `Thermal Warning Level: 0` or `CPU_Speed_Limit = 100`). Text such as "no thermal warning level has been recorded" stays `unknown`. Parsers must test missing and numeric readings separately.
+- **Test both profiles.** Guard tests cover light and heavy behaviour for each state: clear, warning and unknown.
+- **Pause report.** On every pause, tell the owner: the exact blocker; the latest reading and its time; what work is still allowed; the restart condition; and the ETA. Give a measured cooldown when there is one. When restart waits for a future outside reading, say "ETA unknown" — never guess a time.
+
 ## 7. Approval gates
 
 Ask first before: deleting or overwriting material data; publishing or deploying; publishing legal text (privacy, terms, cookie, refund pages, disclaimers); releasing with any `lawyer` row in the legal checklist; sending messages or creating accounts; spending money; using credentials or systems outside the project; installing packages that need the network; major architecture or design-system commitments; choosing a public name.
@@ -110,6 +135,8 @@ Everything else that is local, reversible and within the request goes ahead with
 - `HANDOFF.md` starts with one `CURRENT RESUME` block: baseline commit, objective, decisions, owned files, fresh checks, limits, approvals, local vs published status, and the exact next action. Update it in place before every pause or reset.
 - Older entries live below a history heading; they never override the current block. When history grows, move it unchanged to `handoff-archive/` with an index and append-only corrections.
 - Durable truth lives in source, atlas, tracks, handoff and Git, not in chat memory.
+- **One rule, one wording everywhere.** When a rule changes, update every place that states it in the same change: the stored goal or objective, `AGENTS.md`, `.loop/` files, tracks and the `CURRENT RESUME` block. Search for the old wording and remove it.
+- **Report sync blockers separately.** If a copy cannot be edited (for example a stored goal whose text the available controls cannot change), record it as its own `BLOCKED` item: which copy, the old rule it still holds, and what the owner must do. Never say the goal or task has resumed while its stored text still carries the old rule. A docs fix does not update a stored goal.
 - Progress is measured from the atlas (the atlas status command in `AGENTS.md`: maps delivered / total) plus the owner-approved scope. Do not invent completion percentages.
 
 ## 10. Completion

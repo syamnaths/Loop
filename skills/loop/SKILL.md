@@ -3,7 +3,7 @@ name: loop
 description: "Use when the user says 'Use Loop for this project', 'Apply Loop', 'Resume with Loop', 'Build the next atlas map', or asks for Loop project orchestration. Asks which platform to build for at the start, then starts new projects atlas-first with loop-init.mjs, adopts existing projects, builds one atlas map at a time with proof, and keeps a single CURRENT RESUME handoff."
 ---
 
-# Loop orchestration (v0.4.3, atlas-first)
+# Loop orchestration (v0.4.5, atlas-first)
 
 Apply `loop.md` from the project-local `Loop/` folder when present, otherwise from the plugin root. Companion files: `ATLAS-FIRST.md` (atlas format and build loop), `OWNER-COMMUNICATION.md`, `EFFICIENT-WORKFLOW.md`, `DELIVERY-WORKFLOW.md`, `SECURITY.md`, `LEGAL-CHECKLIST.md` (20 legal checks), `MODEL-ROUTING.md`. The project copy may be newer than the installed plugin; do not edit the installed cache.
 
@@ -45,6 +45,8 @@ Read `AGENTS.md`, `HANDOFF.md` (CURRENT RESUME only), `.loop/platform.md`, then 
 7. Report to the owner in plain words with a screenshot when visual, then repeat.
 
 On the first map, mark every legal check `todo` or `n/a` (with reason) from the brief, and ask the owner once which countries the users are in. Before release, run check 20 (final legal audit): no `todo` or `blocked` rows, and an owner A/B/C decision on every `lawyer` row. Loop drafts legal pages; it never claims legal compliance.
+
+Resource guards (CPU, memory, disk, thermal): rules by task profile — approved light work may run when its checks pass; unknown readings block heavy work; a known warning blocks both. Unknown is never "safe", and a clear state needs a numeric reading. Every pause reports blocker, latest reading and time, what is still allowed, restart condition and ETA (measured, or "unknown"). When a rule changes, update every copy (goal, `AGENTS.md`, `.loop/`, tracks, handoff); a copy that cannot be edited is its own `BLOCKED` item, and the goal is not reported as resumed.
 
 Release, push, spending, data deletion, publishing legal text and user-visible content changes stay behind the approval gates in `loop.md`. When the owner must push, give one copy-paste command and confirm with `git fetch` afterwards.
 
