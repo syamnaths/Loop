@@ -106,6 +106,10 @@ The proof ladder for the chosen platform is in the project's `.loop/platform.md`
 - No heavy infrastructure (Docker, microservices, new frameworks) without a measured reason and owner approval.
 - Security follows [SECURITY.md](./SECURITY.md) at the level the project needs.
 
+### Goal continuity and necessary rests
+
+**Goal pauses belong to the owner.** Keep the goal active until it is complete. Never set it to paused unless the owner explicitly asks. Take necessary temporary rests (for example cooldowns, rate-limit waits or required recovery) without pausing the goal; record the reason and restart condition, then continue automatically when checks pass and the host permits. Continue other authorised work when safe. A rest never bypasses resource guards, approval gates or host limits. The owner may pause while riding or travelling and resume on arrival; do not infer a pause from absence or travel, and do not resume an owner-paused goal until the owner asks.
+
 ### Resource guards and pauses
 
 When a project or host uses a resource guard (CPU, memory, disk, thermal, battery, quota or similar checks before work runs):
@@ -114,7 +118,7 @@ When a project or host uses a resource guard (CPU, memory, disk, thermal, batter
 - **Unknown is never safe.** Missing, empty, unreadable or stale telemetry is `unknown`. Never describe it as "cool", "clear", "safe" or "no problem".
 - **A clear state needs a number.** A positive "no warning" state needs numeric evidence (for example macOS `pmset -g therm`: `Thermal Warning Level: 0` or `CPU_Speed_Limit = 100`). Text such as "no thermal warning level has been recorded" stays `unknown`. Parsers must test missing and numeric readings separately.
 - **Test both profiles.** Guard tests cover light and heavy behaviour for each state: clear, warning and unknown.
-- **Pause report.** On every pause, tell the owner: the exact blocker; the latest reading and its time; what work is still allowed; the restart condition; and the ETA. Give a measured cooldown when there is one. When restart waits for a future outside reading, say "ETA unknown" — never guess a time.
+- **Pause report.** On every necessary rest or owner-requested pause, tell the owner: the exact blocker; the latest reading and its time; what work is still allowed; the restart condition; and the ETA. Give a measured cooldown when there is one. When restart waits for a future outside reading, say "ETA unknown" — never guess a time.
 
 ## 7. Approval gates
 

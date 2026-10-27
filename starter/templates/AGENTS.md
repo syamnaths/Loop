@@ -16,6 +16,10 @@ At the start of a session, after context compaction or when resuming:
 5. Continue the recorded next action within the owner's authorisation, unless the newest request changes it. Do not restart finished work or ask the owner to repeat known requirements.
 6. Before handing off, update the same `CURRENT RESUME` block. Do not create competing status files.
 
+## Goal continuity
+
+**Goal pauses belong to the owner.** Keep the goal active until it is complete. Never set it to paused unless the owner explicitly asks. Take necessary temporary rests (for example cooldowns, rate-limit waits or required recovery) without pausing the goal; record the reason and restart condition, then continue automatically when checks pass and the host permits. Continue other authorised work when safe. A rest never bypasses resource guards, approval gates or host limits. The owner may pause while riding or travelling and resume on arrival; do not infer a pause from absence or travel, and do not resume an owner-paused goal until the owner asks.
+
 ## Build from the atlas
 
 `docs/app-map/` is the shared picture of the product. Every feature addition, removal or behaviour change updates its map in the same change.

@@ -17,6 +17,10 @@ next planned map ({{cmdNext}})
   -> owner-approved push / release (release map)
 ```
 
+## Goal continuity
+
+**Goal pauses belong to the owner.** Keep the goal active until it is complete. Never set it to paused unless the owner explicitly asks. Take necessary temporary rests (for example cooldowns, rate-limit waits or required recovery) without pausing the goal; record the reason and restart condition, then continue automatically when checks pass and the host permits. Continue other authorised work when safe. A rest never bypasses resource guards, approval gates or host limits. The owner may pause while riding or travelling and resume on arrival; do not infer a pause from absence or travel, and do not resume an owner-paused goal until the owner asks.
+
 ## Automatic execution modes
 
 | Mode | When | How |

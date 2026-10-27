@@ -44,9 +44,11 @@ Many owners juggle several projects or find long replies hard to scan (for examp
 - Measured numbers only ("19.8 MB → 1.6 MB"). No invented percentages.
 - Unknown is not safe. A missing reading is "unknown", never "cool", "clear" or "fine".
 
-## Pauses
+## Rests and owner-controlled pauses
 
-Every pause message has five short lines:
+**Goal pauses belong to the owner.** Keep the goal active until it is complete. Never set it to paused unless the owner explicitly asks. Take necessary temporary rests (for example cooldowns, rate-limit waits or required recovery) without pausing the goal; record the reason and restart condition, then continue automatically when checks pass and the host permits. Continue other authorised work when safe. A rest never bypasses resource guards, approval gates or host limits. The owner may pause while riding or travelling and resume on arrival; do not infer a pause from absence or travel, and do not resume an owner-paused goal until the owner asks.
+
+Every necessary rest or owner-requested pause message has five short lines:
 
 1. **Blocked by:** the exact check (for example "thermal status unknown").
 2. **Latest reading:** the value and the time it was taken.

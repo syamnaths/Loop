@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Goal pauses belong to the owner. Necessary rests keep the goal active and work continues when checks pass and the host permits. Owner-requested pauses (including while riding or travelling) wait for the owner to resume. Core policy, skill, communication, workflow and starter handoff instructions agree.
+
 ## 0.4.6 — honest guards and pauses
 
 Lessons from a resource-guard fix (thermal rules that differed between the guard and the goal).
