@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Resolve prioritisation conflicts: stable dependency ordering inside releases, explicit cross-release conflict errors, one active map enforced, blocked-work checkpoints before switching, implicit release dependencies validated, and no next recommendation for invalid plans.
+
+- Prioritise one active big rock, dependencies and valuable outcomes. Atlas dashboard adds focus, ordered queue and Eisenhower triage, sharing its next recommendation with the CLI. Unclassified priorities remain explicit; no speed gains are claimed without measurement.
+
 - Goal pauses belong to the owner. Necessary rests keep the goal active and work continues when checks pass and the host permits. Owner-requested pauses (including while riding or travelling) wait for the owner to resume. Core policy, skill, communication, workflow and starter handoff instructions agree.
 
 ## 0.4.6 — honest guards and pauses

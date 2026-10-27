@@ -25,6 +25,7 @@ import path from 'node:path';
 import readline from 'node:readline';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { priorityPlan } from '../starter/docs/app-map/priority-plan.mjs';
 import { PLATFORMS, PLATFORM_IDS, parsePlatforms, detectPlatforms, platformProfile } from '../starter/platforms.mjs';
 
 const LOOP_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -202,10 +203,31 @@ export function normaliseBrief(raw) {
         while (used.has(id)) id = `${id}-${index + 1}`;
         used.add(id);
         const steps = (base.steps && base.steps.length ? base.steps : ['Start', 'Main action', 'Result']).map(String);
-        return { id, title: base.title || id, goal: base.goal || `Deliver ${base.title || id} for ${brief.audience}.`, steps, acceptance: base.acceptance || '', failure: base.failure || '', release: Number(base.release) || 1 };
+        return { id, title: base.title || id, goal: base.goal || `Deliver ${base.title || id} for ${brief.audience}.`, steps, acceptance: base.acceptance || '', failure: base.failure || '', priority: base.priority, dependsOn: base.dependsOn || [], blockedBy: base.blockedBy || '', release: Number(base.release) || 1 };
     });
     if (!brief.features.length) throw new Error('The brief needs at least one feature for the first release.');
     brief.buildOrder = [...brief.features].sort((a, b) => a.release - b.release).map(f => f.id);
+    // Stable dependency ordering within a release; never silently move scope across releases.
+    const features = new Map(brief.features.map(f => [f.id, f]));
+    const pending = new Set(), done = new Set(), ordered = [];
+    function addFeature(id) {
+        if (pending.has(id)) throw new Error(`Dependency cycle at ${id}`);
+        if (done.has(id)) return;
+        pending.add(id);
+        const f = features.get(id);
+        if (!Array.isArray(f.dependsOn)) throw new Error(`${id}: dependsOn must be an array`);
+        for (const depId of f.dependsOn) {
+            const dep = features.get(depId);
+            if (!dep) throw new Error(`${id}: unknown dependency ${depId}; use the final feature id`);
+            if (dep.release > f.release) throw new Error(`${id}: dependency ${depId} belongs to a later release; resolve release scope first`);
+            addFeature(depId);
+        }
+        pending.delete(id); done.add(id); ordered.push(id);
+    }
+    brief.buildOrder.forEach(addFeature);
+    brief.buildOrder = ordered;
+    const validation = priorityPlan(brief.features.map(f => ({ ...f, status: 'planned' })), { buildOrder: ordered });
+    if (validation.issues.length) throw new Error(validation.issues.join('\n'));
     brief.openQuestions = brief.openQuestions || [...(brief.stack === 'to decide' ? ['Which stack to use'] : []), ...profile.questions, 'Where user data is stored (if any)', 'Accessibility targets', 'Analytics and privacy rules'];
     return brief;
 }
@@ -282,7 +304,7 @@ export function atlasPlan(brief, cmd = commandsFor(brief)) {
         if (f.failure) { rows[rows.length - 1].push(['fail', 'If it fails', f.failure]); edges.push([steps[steps.length - 1][0], 'fail', 'Error'], ['fail', steps[0][0], 'Retry']); }
         rows.push([['done', 'Works end to end', `Acceptance: ${f.acceptance || f.goal}`]]);
         edges.push([steps[steps.length - 1][0], 'done', 'Complete']);
-        return { id: f.id, group: 'Features', title: f.title, status: 'planned', subtitle: f.goal, source: '', rows, edges, notes: [`Planned · release ${f.release} · track .loop/tracks/${f.id}/spec.md`] };
+        return { id: f.id, group: 'Features', title: f.title, status: 'planned', priority: f.priority, dependsOn: f.dependsOn, blockedBy: f.blockedBy, subtitle: f.goal, source: '', rows, edges, notes: [`Planned · release ${f.release} · track .loop/tracks/${f.id}/spec.md`] };
     });
     const meta = {
         title: `${brief.name} · Flow Atlas`, slug: brief.slug, date: today,
@@ -386,7 +408,7 @@ async function main() {
     write('Loop/README.md', `# Loop (project copy)\n\nCopied from Loop ${LOOP_VERSION} on ${today}. Start with \`../AGENTS.md\`, then \`loop.md\` and \`ATLAS-FIRST.md\`. This copy may be newer or older than the installed Loop plugin; it governs this project.\n`);
 
     // Atlas tools
-    for (const file of ['atlas-template.html', 'build-atlas.mjs', 'atlas-status.mjs', 'verify-atlas.mjs']) copy(path.join(STARTER, 'docs/app-map', file), path.join('docs/app-map', file));
+    for (const file of ['atlas-template.html', 'build-atlas.mjs', 'atlas-status.mjs', 'priority-plan.mjs', 'verify-atlas.mjs']) copy(path.join(STARTER, 'docs/app-map', file), path.join('docs/app-map', file));
     const plan = atlasPlan(brief, cmd);
     write('docs/app-map/atlas-data.mjs', atlasModule(plan));
 

@@ -51,7 +51,7 @@ Write every step as the user experiences it, with the real guard, default, exit 
 ## The build loop
 
 1. **Init.** Loop asks the start questions (or reads a filled `START.md`; the platform is chosen there), then `node <Loop>/scripts/loop-init.mjs <project>` creates the project, the atlas (an overview, a roadmap, one `planned` map per feature, a quality-gates map and a `release` map for the platform), a track per map, `.loop/platform.md`, `AGENTS.md`, `HANDOFF.md` and the atlas check. It moves a template page into `design/template-page/` when given, builds the atlas and prints the first feature. Building starts right away.
-2. **Pick.** The atlas next command names the next map in `meta.buildOrder` that is not delivered, with its steps and track.
+2. **Pick.** The atlas next command continues the single active map if ready; otherwise names the first ready map in `meta.buildOrder`, with its steps and track. A blocked active map needs a recorded checkpoint and a return to `planned` before switching. Invalid plans have no next recommendation.
 3. **Plan the map first.** Before code, make the map exact: steps, branches, failure paths, defaults. Show it to the owner when a product decision is open. Set `status: 'building'`.
 4. **Build to the map.** Implement step by step. Add tests that check behaviour, not wording.
 5. **Prove it.** Run the product tests, rebuild the atlas and run the atlas check. Prove behaviour at the strongest level in `.loop/platform.md` (browser, emulator, simulator, staging or device) and say which level you reached. Take screenshots or examples when the owner will judge by eye.
@@ -74,3 +74,16 @@ Write every step as the user experiences it, with the real guard, default, exit 
 ## Existing projects
 
 For a project that has no atlas, start with `loop-init.mjs <project> --adopt [--platform ...]`: it guesses the platform from the files (and says so), adds the atlas tools and a starter `atlas-data.mjs` without touching other files. Then map the current behaviour as `delivered` maps (with source references) before planning new features as `planned` maps.
+
+## Priorities and one active big rock
+
+Use big rocks for delivery and the Eisenhower matrix for triage. A big rock is a small end-to-end outcome, not an entire subsystem. Small rocks are supporting fixes, tests and documentation inside that outcome. Keep one delivery map `building` at a time by default; finish and verify it before starting another. Do not open unrelated work just because it is easy. Parallel work is optional only for independent work with separate ownership and an integration check; never required.
+
+Keep `meta.buildOrder` as the single agreed execution order. Order dependencies before dependants, then prioritise the smallest valuable first-release outcome, blockers and risk-reducing proof. Use effort only as a tie-breaker; avoid invented numerical scores. Record the reason when changing order. Continue the active map before picking another. If it is blocked, record why and the exact restart step in its track and handoff, return it to `planned` while retaining `blockedBy`, then deliberately select the next ready map; do not pretend the blocked work is complete.
+
+Each delivery map may carry `priority: { rock: 'big' | 'small', important: boolean, urgent: boolean, reason: string }`, `dependsOn: [mapId]` and `blockedBy: 'reason'`. Missing priority means unclassified, not unimportant. Urgent requires an actual deadline or immediate impact in the reason. Important + urgent means triage now; important + not urgent means protect focus; urgent + not important means timebox or delegate only if authorised; neither means defer for owner review, never silently delete scope. The matrix does not override dependencies, approval gates or an active map. Reorder the source build order deliberately when triage warrants it.
+
+The atlas dashboard shows current focus, ordered ready/blocked work, big/small rocks and the four matrix quadrants. Its next recommendation must match `atlas-status --next`. Reassess after a delivered map or a material blocker, not after every small task. Track elapsed delivery time, blocked time and reopened work when available; do not promise faster development or a percentage improvement without comparable measurements.
+
+
+Dependency precedence is mandatory: all unfinished prerequisites must be in the build order, before their dependants. The starter uses a stable dependency order within each release; dependencies on later releases require a scope decision instead of an automatic release change. Cycles, missing dependencies, multiple building maps and delivered maps with unfinished prerequisites are invalid. Release depends on every feature in the current atlas and must come after them; adding future scope requires updating the release plan explicitly. Urgency does not override any of these constraints.

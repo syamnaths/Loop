@@ -3,6 +3,7 @@
 // Run: node docs/app-map/atlas-status.mjs            (summary)
 //      node docs/app-map/atlas-status.mjs --next     (next map to build + its track)
 //      node docs/app-map/atlas-status.mjs --json     (machine-readable)
+import { priorityPlan } from './priority-plan.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -31,7 +32,9 @@ for (const g of graphs) {
     if (status(g) !== 'delivered' && g.group === (meta.featureGroup || 'Features') && !fs.existsSync(track)) issues.push(`${g.id}: no track folder at .loop/tracks/${g.id}`);
 }
 
-const next = order.map(id => byId[id]).find(g => g && status(g) !== 'delivered') || null;
+const priorities = priorityPlan(graphs, meta);
+issues.push(...priorities.issues);
+const next = byId[priorities.next] || null;
 const summary = {
     project: meta.title,
     snapshot: `${meta.commit} · ${meta.date}`,
@@ -40,13 +43,15 @@ const summary = {
     building: graphs.filter(g => status(g) === 'building').map(g => g.id),
     planned: graphs.filter(g => status(g) === 'planned').map(g => g.id),
     next: next ? { id: next.id, title: next.title, status: status(next), track: `.loop/tracks/${next.id}/spec.md` } : null,
+    priorities,
     issues
 };
 
 if (args.has('--json')) {
     console.log(JSON.stringify(summary, null, 2));
 } else if (args.has('--next')) {
-    if (!next) console.log('Every map is delivered. Add the next feature to the atlas as a planned map.');
+    if (issues.length) console.log(`Invalid atlas plan:\n- ${issues.join('\n- ')}`);
+    else if (!next) console.log(priorities.queue.length ? 'No ready map. Resolve blockers or checkpoint the blocked active map before switching work.' : 'Every map is delivered. Add the next feature to the atlas as a planned map.');
     else {
         console.log(`Next: ${next.title} (${next.id}) · ${status(next)}`);
         console.log(`Track: ${summary.next.track}`);
@@ -58,6 +63,8 @@ if (args.has('--json')) {
     console.log(`${summary.project} — ${summary.snapshot}`);
     console.log(`Maps: ${summary.total} · delivered ${summary.delivered.length} · building ${summary.building.length} · planned ${summary.planned.length} (${pct}% of maps delivered)`);
     if (next) console.log(`Next to build: ${next.title} (${next.id}) → ${summary.next.track}`);
+    for (const warning of priorities.warnings) console.log(`Warning: ${warning}`);
+    for (const item of priorities.queue.filter(g => g.blockers.length)) console.log(`Blocked: ${item.title} — ${item.blockers.join('; ')}`);
     console.log(issues.length ? `Issues:\n- ${issues.join('\n- ')}` : 'Issues: none');
 }
 process.exit(issues.length ? 1 : 0);

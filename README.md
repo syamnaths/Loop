@@ -82,6 +82,12 @@ Under a feature you can add indented lines: `fails: ...` (what happens on error)
 | "Prepare the release." | Runs the final legal audit, works through the release map and stops before publishing for your OK |
 | "Show legal status." | Shows the legal checklist count and only the items that need you or a lawyer |
 
+### Prioritise delivery
+
+Loop keeps one active delivery map: a small end-to-end big rock, with its supporting fixes, tests and documentation. Dependencies come first; `meta.buildOrder` records the agreed order. The atlas dashboard shows the next focus, ready and blocked work, and an Eisenhower matrix for urgency and importance. Priority is unclassified until recorded with a reason; urgent labels never silently override the build order. See `ATLAS-FIRST.md` for the priority fields.
+
+This can reduce switching and unfinished work; measure delivery and blocked time before claiming a speed improvement.
+
 ### Check progress yourself
 
 | JavaScript projects | Other platforms | What it shows |

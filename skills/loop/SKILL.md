@@ -35,7 +35,7 @@ Read `AGENTS.md`, `HANDOFF.md` (CURRENT RESUME only), `.loop/platform.md`, then 
 
 ## Build loop (one map at a time)
 
-1. The atlas next command → the next map in `meta.buildOrder` and its track.
+1. The atlas next command → the single ready active map, or the first dependency-ready map in `meta.buildOrder`, and its track. Resolve invalid plans or checkpoint blocked active work before choosing another map.
 2. Confirm the map's steps are still right; edit the map first if not (`planned` → `building`).
 3. Build only that map's behaviour. Add or update a test that proves it.
 4. Prove at the strongest level in `.loop/platform.md` (for example browser, emulator, simulator, staging, device). Say which level you reached.
@@ -51,6 +51,10 @@ On the first map, mark every legal check `todo` or `n/a` (with reason) from the 
 Resource guards (CPU, memory, disk, thermal): rules by task profile — approved light work may run when its checks pass; unknown readings block heavy work; a known warning blocks both. Unknown is never "safe", and a clear state needs a numeric reading. Every necessary rest or owner-requested pause reports blocker, latest reading and time, what is still allowed, restart condition and ETA (measured, or "unknown"). When a rule changes, update every copy (goal, `AGENTS.md`, `.loop/`, tracks, handoff); a copy that cannot be edited is its own `BLOCKED` item, and the goal is not reported as resumed.
 
 Release, push, spending, data deletion, publishing legal text and user-visible content changes stay behind the approval gates in `loop.md`. When the owner must push, give one copy-paste command and confirm with `git fetch` afterwards.
+
+## Prioritise before starting work
+
+Keep one active delivery map (the current big rock). Finish its supporting fixes, tests and docs before unrelated work. Dependencies come first; then the smallest valuable outcome and risk reduction. `meta.buildOrder` is the agreed order; the Eisenhower matrix is triage, not an automatic override. Record blockers and reasons for reordering. Before switching from a blocked active map, checkpoint its restart step in the track and handoff and return it to `planned` with `blockedBy` retained. Multiple building maps are invalid; priority never bypasses dependencies or release boundaries. See `ATLAS-FIRST.md` → Priorities and one active big rock.
 
 ## Routing
 

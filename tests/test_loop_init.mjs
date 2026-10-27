@@ -229,3 +229,29 @@ test('new projects get a full .gitignore that keeps the Loop record', () => {
         assert.ok(!gi.split('\n').includes(kept), `${kept} is not ignored`);
     }
 });
+
+test('brief dependency order is stable and cross-release conflicts are refused', async () => {
+ const { normaliseBrief } = await import('../scripts/loop-init.mjs');
+ const base={name:'Dependency check',platforms:['web']};
+ const brief=normaliseBrief({...base,features:[{id:'checkout',dependsOn:['cart']},{id:'cart'},{id:'about'}]});
+ assert.deepEqual(brief.buildOrder,['cart','checkout','about']);
+ assert.throws(()=>normaliseBrief({...base,features:[{id:'checkout',dependsOn:['cart']},{id:'cart',release:2}]}),/later release/);
+ assert.throws(()=>normaliseBrief({...base,features:[{id:'checkout',dependsOn:['missing']}]}),/unknown dependency/);
+ assert.throws(()=>normaliseBrief({...base,features:[{id:'a',dependsOn:['b']},{id:'b',dependsOn:['a']}]}),/cycle/);
+});
+
+test('dashboard and CLI agree; multiple active maps stop next and atlas build', () => {
+ const dir=path.join(temp(),'priority-agreement');
+ assert.equal(node([INIT,dir,'--brief',BRIEF]).status,0);
+ const data=path.join(dir,'docs/app-map/atlas-data.mjs');
+ const status=node(['docs/app-map/atlas-status.mjs','--json'],dir);
+ const plan=JSON.parse(status.stdout);
+ const html=fs.readFileSync(path.join(dir,'docs/app-map/index.html'),'utf8');
+ const embedded=JSON.parse(html.match(/const atlas = (.*);/)[1]);
+ assert.equal(embedded.priorities.next,plan.next.id);
+ fs.appendFileSync(data,"\nfor (const id of meta.buildOrder.slice(0,2)) { const g=graphs.find(g=>g.id===id); g.status='building'; g.source='AGENTS.md:1'; }\n");
+ const next=node(['docs/app-map/atlas-status.mjs','--next'],dir);
+ assert.equal(next.status,1);assert.match(next.stdout,/Multiple building maps/);assert.doesNotMatch(next.stdout,/^Next:/m);
+ const build=node(['docs/app-map/build-atlas.mjs'],dir);
+ assert.equal(build.status,1);assert.match(build.stderr,/Multiple building maps/);
+});

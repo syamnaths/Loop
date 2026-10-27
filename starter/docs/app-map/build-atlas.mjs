@@ -2,6 +2,7 @@
 // index.html (interactive atlas), FLOW-REFERENCE.md (text + Mermaid),
 // atlas.json and, when meta.inventoryPages is set, CONTROL-INVENTORY.md.
 // No dependencies. Run: node docs/app-map/build-atlas.mjs
+import { priorityPlan } from './priority-plan.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -49,12 +50,14 @@ for (const graph of graphs) {
         if (+line > fs.readFileSync(full, 'utf8').split('\n').length) problems.push(`${where}: line out of range ${reference}`);
     }
 }
+const priorities = priorityPlan(graphs, meta);
+problems.push(...priorities.issues);
 if (problems.length) {
     console.error('Atlas build stopped:\n- ' + problems.join('\n- '));
     process.exit(1);
 }
 
-const data = JSON.stringify({ meta, graphs }).replaceAll('<', '\\u003c');
+const data = JSON.stringify({ meta, graphs, priorities }).replaceAll('<', '\\u003c');
 const template = fs.readFileSync(path.join(directory, 'atlas-template.html'), 'utf8');
 fs.writeFileSync(path.join(directory, 'index.html'), template.replace('/* ATLAS_DATA */', `const atlas = ${data};`));
 
