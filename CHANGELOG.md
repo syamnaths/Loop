@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make TDD explicit for testable behavior, unit coverage for logic and integration coverage for changed boundaries. Reuse existing tests. Feature closure now includes a focused security/pentest review, evidenced vulnerability discussion before remediation, regression-tested fixes and re-review; awaiting discussion never pauses the goal.
+
 - Resolve prioritisation conflicts: stable dependency ordering inside releases, explicit cross-release conflict errors, one active map enforced, blocked-work checkpoints before switching, implicit release dependencies validated, and no next recommendation for invalid plans.
 
 - Prioritise one active big rock, dependencies and valuable outcomes. Atlas dashboard adds focus, ordered queue and Eisenhower triage, sharing its next recommendation with the CLI. Unclassified priorities remain explicit; no speed gains are claimed without measurement.

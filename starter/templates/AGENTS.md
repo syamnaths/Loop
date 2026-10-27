@@ -50,6 +50,10 @@ Give approve-style options (A recommended / B / C) only for decisions that chang
 - Measure before claiming sizes, speed or savings. Device feel and sound need a device check.
 - Consent, privacy and safety first for sensitive features; never store private choices.
 
+## Tests and security before delivery
+
+Follow TDD for testable behavior: confirm a meaningful failing test before implementation, then GREEN and refactor. Reuse existing coverage; add unit tests for changed logic and integration tests for changed component boundaries, with failure paths where applicable. Record skipped or blocked levels honestly (details in Loop/DELIVERY-WORKFLOW.md). Before marking a feature delivered, perform the focused security review in Loop/SECURITY.md, list evidenced vulnerabilities and discuss them with the owner before remediation. Fix agreed findings, rerun tests and re-review. No findings means report limits and continue; no empty approval gate.
+
 ## Legal checklist
 
 `.loop/legal-checklist.md` holds the 20 legal checks (rules in `Loop/LEGAL-CHECKLIST.md`). When a map collects personal data, adds cookies or trackers, a third-party API, a package, assets, AI content, payments, advice or marketing text, update those rows in the same change. The release needs check 20 (final legal audit) done. Loop drafts legal pages and flags lawyer items; the owner approves legal text before it is published. Never claim the product is legally compliant.

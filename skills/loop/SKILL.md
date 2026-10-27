@@ -37,10 +37,10 @@ Read `AGENTS.md`, `HANDOFF.md` (CURRENT RESUME only), `.loop/platform.md`, then 
 
 1. The atlas next command → the single ready active map, or the first dependency-ready map in `meta.buildOrder`, and its track. Resolve invalid plans or checkpoint blocked active work before choosing another map.
 2. Confirm the map's steps are still right; edit the map first if not (`planned` → `building`).
-3. Build only that map's behaviour. Add or update a test that proves it.
+3. Follow TDD for that map's testable behaviour: confirm RED, implement GREEN, then refactor. Reuse coverage; unit-test changed logic and integration-test changed boundaries, including applicable failure paths (DELIVERY-WORKFLOW.md). Record mocks, blocked checks and not-applicable levels.
 4. Prove at the strongest level in `.loop/platform.md` (for example browser, emulator, simulator, staging, device). Say which level you reached.
    Legal: if the map collects data, adds cookies or trackers, an API, a package, assets, AI content, payments, advice or marketing text, update those rows in `.loop/legal-checklist.md` (trigger table in `LEGAL-CHECKLIST.md`). No touched row may stay `todo`.
-5. Flip the map to `delivered` with real `file:line` sources. The atlas build refuses fake or missing sources.
+5. Before delivery, perform the feature security review in `SECURITY.md`: list evidenced vulnerabilities, discuss them with the owner before remediation, fix agreed findings and rerun tests/review. While awaiting discussion keep the goal active, checkpoint and mark the feature `planned` with `blockedBy` before selecting other ready work. No confirmed findings means report checks and limits and continue. Then flip the map to `delivered` with real `file:line` sources. The atlas build refuses fake or missing sources.
 6. Run the product tests and the atlas check, update the CURRENT RESUME block (progress from the atlas status), commit with a checkpoint id.
 7. Report to the owner in plain words with a screenshot when visual, then repeat.
 

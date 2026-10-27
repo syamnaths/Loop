@@ -37,6 +37,10 @@ Keep one active delivery map (the current big rock). Finish its supporting fixes
 
 Escalate when scope grows; de-escalate only at a clean checkpoint.
 
+## Tests and security before delivery
+
+Follow TDD for testable behavior: confirm a meaningful failing test before implementation, then GREEN and refactor. Reuse existing coverage; add unit tests for changed logic and integration tests for changed component boundaries, with failure paths where applicable. Record skipped or blocked levels honestly (details in Loop/DELIVERY-WORKFLOW.md). Before marking a feature delivered, perform the focused security review in Loop/SECURITY.md, list evidenced vulnerabilities and discuss them with the owner before remediation. Fix agreed findings, rerun tests and re-review. No findings means report limits and continue; no empty approval gate.
+
 ## Shared hotspots (one owner at a time)
 
 `docs/app-map/`, {{hotspots}}.

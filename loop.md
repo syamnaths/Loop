@@ -69,6 +69,14 @@ Do not restart discovery. Read the newest request, `AGENTS.md`, the `CURRENT RES
 - **Check the real docs.** For an API, package or platform feature you are not sure about, read its current official documentation or the installed version's source; do not code from memory.
 - **Done means a check passes.** Before coding, turn the task into a check (a test, a command or a screenshot) that fails or is missing now and will pass when the work is right. Loop until it passes.
 
+## Prioritise before starting work
+
+Keep one active delivery map (the current big rock). Finish its supporting fixes, tests and docs before unrelated work. Dependencies come first; then the smallest valuable outcome and risk reduction. `meta.buildOrder` is the agreed order; the Eisenhower matrix is triage, not an automatic override. Record blockers and reasons for reordering. Before switching from a blocked active map, checkpoint its restart step in the track and handoff and return it to `planned` with `blockedBy` retained. Multiple building maps are invalid; priority never bypasses dependencies or release boundaries. See `ATLAS-FIRST.md` → Priorities and one active big rock.
+
+## Tests and security before delivery
+
+Follow TDD for testable behavior: confirm a meaningful failing test before implementation, then GREEN and refactor. Reuse existing coverage; add unit tests for changed logic and integration tests for changed component boundaries, with failure paths where applicable. Record skipped or blocked levels honestly (details in DELIVERY-WORKFLOW.md). Before marking a feature delivered, perform the focused security review in SECURITY.md, list evidenced vulnerabilities and discuss them with the owner before remediation. Fix agreed findings, rerun tests and re-review. No findings means report limits and continue; no empty approval gate.
+
 ## 4. Product rules learned the hard way
 
 These apply to every project unless the owner says otherwise.

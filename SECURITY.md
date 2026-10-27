@@ -48,6 +48,16 @@ Apply the [OWASP Password Storage Cheat Sheet](https://cheatsheetseries.owasp.or
 
 Required secret-handling tests include plaintext-password rejection, unique-salt/hash verification, expired and rotated credential rejection, missing-secret fail-closed behavior, log redaction, repository scanning, `.env` ignore verification, and secret absence from browser artifacts.
 
+## Feature security review and owner discussion
+
+After functional implementation and applicable unit/integration checks pass, but before the map is marked `delivered`, adopt a security reviewer and pentester mindset in a separate review pass. Use the existing required checks above for the changed attack surface and its affected trust boundaries; do not repeat an unchanged, evidenced review without a reason. This is a review role, not a requirement to spawn another agent or run every security tool. Existing high-risk independent review requirements still apply.
+
+1. Review the actual diff and affected data flows, then attempt focused negative/abuse tests relevant to the feature (for example unauthorised access, cross-user access, injection, replay or unsafe error disclosure). Active testing stays within explicitly authorised local or isolated test environments with synthetic data. Production or third-party targets, destructive tests and load/denial-of-service testing need specific authorisation. Missing tooling is `BLOCKED` or `INCOMPLETE`, never a clean pentest result.
+2. Record findings once in the track review (or its spec for a small track): stable ID, severity with rationale, affected file/line, preconditions, safe reproduction or test evidence, user/data impact, proposed fix and verification. Distinguish confirmed vulnerabilities from suspected risks and untested controls; do not invent findings to fill a list. Redact sensitive evidence.
+3. List the findings for the owner in plain language, discuss impact and recommended fixes, and wait for their response before implementing security-review remediation. If there are no confirmed findings, report the checks and limits and continue without an empty approval gate. Previously discussed and authorised fixes do not require repeated approval unless scope changes. Do not treat silence as acceptance.
+4. Keep the goal active during that discussion. Record the feature as awaiting security discussion using `blockedBy`, checkpoint its restart step and return its map to `planned` before taking other dependency-ready work. Never mark it delivered while required checks or the discussion remain unresolved. Critical/high findings block delivery; medium/low findings require a recorded fix or explicit owner disposition. Release gates in `loop.md` still apply.
+5. After discussion, fix the agreed findings with a failing regression/security test first where practical, rerun that test plus affected unit/integration checks, then repeat the focused security review. Update each finding with evidence and its final disposition; unresolved findings remain visible in the fix queue and handoff. Report the tested controls and remaining risk, never claim the feature is vulnerability-free.
+
 ### Security verdicts
 
 Report each security check as:

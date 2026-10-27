@@ -49,7 +49,7 @@ Any validated checkpoint may become REVERTED through the recovery protocol.
 5. Route each bounded task independently under `MODEL-ROUTING.md`.
 6. Implement with test-first behavior where appropriate and checkpoint after fresh validation.
 7. Run spec-compliance review before code-quality/security review.
-8. Add a `Review Fixes` phase for unresolved findings and re-review after fixes.
+8. Before declaring a feature delivered, run the feature security review and owner discussion in `SECURITY.md`; findings enter `Review Fixes`. Add a `Review Fixes` phase for unresolved findings and re-review after fixes.
 9. Synchronize track status, project context, handoff, and checkpoint history.
 10. Claim completion only from fresh evidence that covers tests and acceptance criteria.
 
@@ -83,7 +83,7 @@ Do not stack speculative fixes. After three failed materially different attempts
 
 ## Test-first implementation
 
-For defects and stable behavioral requirements, prefer RED-GREEN-REFACTOR:
+For new or changed testable behavior and defects, follow TDD with RED-GREEN-REFACTOR:
 
 1. Add or identify the smallest test that expresses the required behavior.
 2. Run it and confirm it fails for the expected reason.
@@ -92,7 +92,9 @@ For defects and stable behavioral requirements, prefer RED-GREEN-REFACTOR:
 5. Refactor without changing behavior.
 6. Run the relevant broader checks.
 
-Do not force test-first work when no safe deterministic test surface exists. Record the alternative evidence and residual risk. Playwright and screenshots remain opt-in under `loop.md`.
+Use unit tests for changed deterministic logic and integration tests for changed boundaries (for example route → service → database, authentication/authorisation, storage, queues or external adapters). Reuse meaningful existing tests rather than duplicating them. Integration tests exercise the real collaborating components in an isolated environment; a mocked boundary proves only the mocked contract. Cover a successful path and applicable failure, access-control and rollback paths. Record the commands and expected RED reason, GREEN results, test scope and any mocks in the track.
+
+Do not force test-first work when no safe deterministic test surface exists, or unit/integration tests for docs-only or purely visual changes without relevant behavior. Record why a test level is not applicable or blocked, the alternative evidence and residual risk. Never invent a failing result after implementation. Visual proof follows `loop.md`.
 
 ## Isolated implementation
 
