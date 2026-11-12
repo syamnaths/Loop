@@ -1,4 +1,8 @@
-# Install and invoke Loop in Codex
+# Install and invoke Loop with coding agents
+
+The starter and project-local Loop files work independently of the Codex plugin. New projects include `AGENTS.md` for agents that load it, `CLAUDE.md` for Claude Code, and `GEMINI.md` for Gemini-compatible hosts, including Antigravity. The latter two point to `.loop/agent-instructions.md`. Cursor also supports `AGENTS.md`. Host behavior varies, so confirm your agent actually reads the files; if necessary, explicitly ask it to read `.loop/agent-instructions.md` and `HANDOFF.md`. When adopting a project, Loop preserves existing instruction files. If one already exists, add a reference to the shared instructions yourself. Keep shared rules in `AGENTS.md` and `.loop/agent-instructions.md` consistent when editing them.
+
+For an agent without a compatible CLI, open the project in the agent and paste: `Read .loop/agent-instructions.md and HANDOFF.md. Use Loop for this project. Build the next atlas map.` The optional Codex plugin and Codex model router are host-specific; other agents can use the workflow without either. `LOOP_AGENT` names an executable, not a shell command with flags, and `--start` passes one prompt argument; use manual startup if your host expects different arguments.
 
 ## Start a project without the plugin
 

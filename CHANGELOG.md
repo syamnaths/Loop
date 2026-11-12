@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Name design defaults: Material Design 3 for web/Android/cross-platform, Apple HIG/native components for native iOS/macOS and platform conventions elsewhere. Preserve existing approved designs and avoid automatic package installs.
+
+- Add an explicit professional design gate: agreed visual direction, consistent components, complete interaction states, responsive/accessibility checks and rendered visual evidence. Include it in feature tracks and the cloud instruction.
+
 - Make TDD explicit for testable behavior, unit coverage for logic and integration coverage for changed boundaries. Reuse existing tests. Feature closure now includes a focused security/pentest review, evidenced vulnerability discussion before remediation, regression-tested fixes and re-review; awaiting discussion never pauses the goal.
 
 - Resolve prioritisation conflicts: stable dependency ordering inside releases, explicit cross-release conflict errors, one active map enforced, blocked-work checkpoints before switching, implicit release dependencies validated, and no next recommendation for invalid plans.

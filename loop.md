@@ -77,6 +77,19 @@ Keep one active delivery map (the current big rock). Finish its supporting fixes
 
 Follow TDD for testable behavior: confirm a meaningful failing test before implementation, then GREEN and refactor. Reuse existing coverage; add unit tests for changed logic and integration tests for changed component boundaries, with failure paths where applicable. Record skipped or blocked levels honestly (details in DELIVERY-WORKFLOW.md). Before marking a feature delivered, perform the focused security review in SECURITY.md, list evidenced vulnerabilities and discuss them with the owner before remediation. Fix agreed findings, rerun tests and re-review. No findings means report limits and continue; no empty approval gate.
 
+## Professional design before delivery
+
+**Design-system selection.** The owner's approved reference or existing product system takes precedence. Otherwise use [Material Design 3](https://m3.material.io/) as the default for web, Android and cross-platform interfaces, customised with the product's brand tokens. For native iOS/macOS use [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/) and native components. Other native platforms follow their platform conventions. These defaults authorise an initial representative screen, not a silent redesign of an existing product. Record the chosen system and tokens in the project design notes; obtain the owner's decision before a major new visual commitment. A design system is not a package: reuse the existing stack and check current supported implementations before proposing any new dependency. Avoid mixing competing component styles; verify accessibility and visual quality in the actual implementation.
+
+Every user-facing feature must look and behave like a coherent finished product. Follow the owner's reference and the existing design system; reuse established components. Without a reference, propose a concise direction suited to the audience and platform, show one representative screen, and obtain the owner's decision on a major new visual direction before spreading it across the product. Routine polish within the agreed direction needs no repeated approval.
+
+**Motion defaults.** Include hover effects, smooth loading indicators, 3D motion, entrance reveals, micro-interactions and parallax in the visual design, adapted to the product and platform. Use subtle, purposeful effects and provide touch and keyboard equivalents for hover. Respect reduced-motion settings by removing or replacing spatial motion, including 3D, reveals and parallax, while keeping status and feedback clear. Avoid delaying access to content, blocking interaction or adding unnecessary dependencies; verify performance and the reduced-motion experience on representative screens.
+
+- Establish consistent typography, spacing, alignment, colour, iconography and component states. Use clear information hierarchy, readable content widths and restrained decoration; avoid generic ornament that distracts from the task.
+- Design the full experience: loading, empty, success, error, validation, disabled and permission states where applicable. Use real approved content; do not ship placeholder copy, broken assets or dead controls.
+- Adapt to the platform and relevant screen sizes, including long translated text. Check keyboard navigation, visible focus, labels, contrast, touch targets and reduced-motion preferences where relevant.
+- Before delivery, inspect the rendered feature at representative sizes and exercise the key interactions. Correct clipping, overflow, inconsistent spacing and unclear actions; show the owner representative screenshots with any remaining limits. Source inspection alone is not visual proof. If rendering tools are unavailable, record visual review as blocked rather than claiming polish is verified.
+
 ## 4. Product rules learned the hard way
 
 These apply to every project unless the owner says otherwise.

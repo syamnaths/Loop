@@ -37,9 +37,22 @@ test('a new project is born from its atlas plan', () => {
     assert.equal((handoff.match(/^## CURRENT RESUME/gm) || []).length, 1);
     assert.match(handoff, /build \*\*First open\*\*/);
     assert.doesNotMatch(fs.readFileSync(path.join(dir, 'AGENTS.md'), 'utf8') + handoff, /\{\{\w+\}\}/, 'no placeholders left');
+    for (const file of ['CLAUDE.md', 'GEMINI.md']) {
+        assert.match(fs.readFileSync(path.join(dir, file), 'utf8'), /\.loop\/agent-instructions\.md/);
+    }
+    assert.equal(fs.readFileSync(path.join(dir, '.loop/agent-instructions.md'), 'utf8'), fs.readFileSync(path.join(dir, 'AGENTS.md'), 'utf8'));
     // The generated project's own checks pass.
     const tests = node(['--test'], dir);
     assert.equal(tests.status, 0, tests.stdout + tests.stderr);
+});
+
+test('adoption preserves existing agent instructions and supplies a Loop entry point', () => {
+    const dir = temp();
+    for (const file of ['AGENTS.md', 'CLAUDE.md', 'GEMINI.md']) fs.writeFileSync(path.join(dir, file), `Existing ${file}\n`);
+    const result = node([INIT, dir, '--adopt', '--name', 'Existing', '--platform', 'web']);
+    assert.equal(result.status, 0, result.stderr);
+    for (const file of ['AGENTS.md', 'CLAUDE.md', 'GEMINI.md']) assert.equal(fs.readFileSync(path.join(dir, file), 'utf8'), `Existing ${file}\n`);
+    assert.match(fs.readFileSync(path.join(dir, '.loop/agent-instructions.md'), 'utf8'), /atlas-first/);
 });
 
 test('the platform is chosen at the start: an Android project gets no npm and Android rules', () => {

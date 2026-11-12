@@ -128,6 +128,9 @@ For changes where a mistake is costly — security, payments, personal data, dat
 - Where the reviewer and implementer disagree, the supervisor checks the code and decides; open disagreements go to the owner as an A/B choice.
 - This is opt-in for routine work. Running several models on every task multiplies cost (often about 3x) with little gain; say the cost before using it widely.
 
+For user-facing work, include the professional design gate in `loop.md`: inspect representative rendered screens, interaction states, responsiveness and accessibility before delivery; report unavailable visual proof honestly.
+Include the motion defaults in `loop.md`, checking touch and keyboard equivalents, reduced-motion alternatives and performance.
+
 ## Verification before completion
 
 No success claim may rely only on confidence, an earlier run, static inspection, or another agent’s statement. Immediately before completion:

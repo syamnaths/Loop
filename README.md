@@ -4,12 +4,14 @@ Loop is a local-first framework for building software with an AI agent and a hum
 
 Loop is **platform-independent**. You choose the platform at the start: web, Android, iPhone/iPad, mobile for both (Flutter, React Native…), desktop, backend/API, command-line/library, other, or several together. The choice shapes the proof ladder, platform rules, version bumps and the release map. The atlas tools need Node 18+ on your machine only.
 
+For cloud chats without a local Loop installation, paste [Loop — one-page cloud instruction](LOOP-CLOUD-ONE-PAGE.md). It includes the current priority, testing, security and continuity rules.
+
 ## How to use
 
 ### What you need
 
 - **Node 18 or later** on your computer. Loop's atlas tools use it. Your app itself can be built with anything.
-- **A coding agent**, for example Codex, Claude or Cursor.
+- **A coding agent**, for example Codex, Claude Code, Google Antigravity (agy), Gemini CLI or Cursor.
 - **The agent must know where Loop is.** Either install the Codex plugin (see `INSTALL.md`), or add one line to your first message: *"Loop is at ~/Desktop/Ikigai/Loop."*
 
 ### Start a new project (3 ways)
@@ -36,7 +38,9 @@ node scripts/loop-init.mjs ~/Desktop/Ikigai/my-app --git --start    # same, then
 node scripts/loop-init.mjs ~/Desktop/Ikigai/my-app --brief my-brief.json --platform android
 ```
 
-`--start` opens Codex by default. To use another agent command, set `LOOP_AGENT`, for example `LOOP_AGENT=claude`. JSON briefs still work (see `examples/`).
+`--start` opens Codex by default. `LOOP_AGENT=claude` selects another executable, but this shortcut passes the kickoff as one argument and only works with CLIs that accept that form. For an IDE or a different CLI, open the generated project and paste the kickoff yourself. JSON briefs still work (see `examples/`).
+
+Generated projects include `AGENTS.md`, `CLAUDE.md` and `GEMINI.md` entry points and shared instructions in `.loop/agent-instructions.md`. These help agents discover Loop; support and instruction loading vary by host. If an agent does not pick them up, ask it: “Read `.loop/agent-instructions.md` and `HANDOFF.md`, then use Loop for this project.” Existing instruction files are preserved during adoption; add that instruction to them yourself if automatic discovery is needed. Keep `AGENTS.md` and `.loop/agent-instructions.md` consistent when changing their shared rules.
 
 ### Filling START.md
 
@@ -108,6 +112,7 @@ Open the project folder in your agent and say **"Resume with Loop."** The `CURRE
 | Path | Purpose |
 | --- | --- |
 | `AGENTS.md` | Working agreement every agent reads first |
+| `CLAUDE.md`, `GEMINI.md`, `.loop/agent-instructions.md` | Agent-specific entry points and shared Loop instructions |
 | `HANDOFF.md` | One `CURRENT RESUME` block: status and the exact next action |
 | `.loop/workflow.md`, `.loop/tracks/<map>/spec.md` | Delivery path, modes, and a done-checklist per feature and for release |
 | `.loop/platform.md` | Chosen platform: stack, test commands, proof ladder, rules, release path |
