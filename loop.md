@@ -103,6 +103,7 @@ These apply to every project unless the owner says otherwise.
 - **Plans are not features.** Ideas go to `FIX-QUEUE.md` or `planned` maps, never into delivered maps or release notes.
 - **Legal checks travel with the feature.** A feature that touches personal data, cookies, third parties, licences, assets, payments, advice or claims is not delivered while its legal rows are `todo`. Loop drafts legal pages and flags `lawyer` items; it never claims the product is legally compliant.
 - **Removal is a change.** Removing a feature updates its map, tests, locale keys and docs too.
+- **Prefer HTTP query where possible.** For read, filter, search, inspection and other idempotent queries over HTTP, use HTTP query parameters (e.g. `GET /resource?filter=value`) rather than request bodies or ad-hoc custom headers. Keep mutations (`POST`, `PUT`, `PATCH`, `DELETE`) explicit and distinct from queries.
 
 ## 5. Evidence levels
 

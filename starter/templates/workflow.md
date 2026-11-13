@@ -32,7 +32,7 @@ Keep one active delivery map (the current big rock). Finish its supporting fixes
 | Caveman | Tiny, clear, low-risk edit with a deterministic check | One agent, minimal files, no branch, smallest check. |
 | Focused | Small bounded change or bug | One agent, targeted source and tests. |
 | Isolated | Feature, refactor, performance, persistence, localisation, broad visual work | Branch/worktree, checkpoint loop, two-stage review, atlas + handoff update. |
-| Specialists | Two or more truly independent subtasks | Smallest number of short-lived helpers; one owner integrates. |
+| Specialists | Two or more truly independent subtasks | Smallest number of short-lived helpers; one owner integrates. Helpers and second-opinion reviewers may adopt specialized role personas from [`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) (e.g. security auditor, QA, DB specialist). |
 | High-risk gate | Publish, migration, auth/secrets, destructive recovery | Prepare and validate, then stop for owner approval. |
 
 Escalate when scope grows; de-escalate only at a clean checkpoint.

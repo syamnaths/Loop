@@ -110,7 +110,7 @@ WebSocket is supported but not required for every project. If WebSocket is selec
 The selected transport must support the required application behaviors or document a safe fallback for:
 
 - Request/response
-- Commands and queries
+- Commands and queries (prefer HTTP query strings/parameters for read, search, and idempotent queries over HTTP adapters)
 - Events and subscriptions
 - Progress and completion
 - Cancellation and expiry

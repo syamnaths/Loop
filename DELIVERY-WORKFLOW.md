@@ -124,7 +124,7 @@ Treat every review comment (owner, reviewer or model) as a claim to check, not a
 
 For changes where a mistake is costly — security, payments, personal data, data migration or deletion, a major architecture choice — get one independent review before completion:
 
-- The reviewer starts fresh: a different model when one is available, otherwise a new sub-agent without the implementer's context. Give it the spec, the diff and one lens (for example security, data safety or accessibility).
+- The reviewer starts fresh: a different model when one is available, otherwise a new sub-agent without the implementer's context. Give it the spec, the diff and one lens (for example security, data safety or accessibility). For specialized lenses (such as deep security audit, database optimization, or accessibility), agents may adopt opt-in expert role personas from [`msitarzewski/agency-agents`](https://github.com/msitarzewski/agency-agents) to focus reviews with domain-specific criteria and checklists.
 - Where the reviewer and implementer disagree, the supervisor checks the code and decides; open disagreements go to the owner as an A/B choice.
 - This is opt-in for routine work. Running several models on every task multiplies cost (often about 3x) with little gain; say the cost before using it widely.
 
