@@ -231,14 +231,14 @@ test('tracks carry boundaries, and atlas status reports weak or out-of-range sou
     assert.doesNotMatch(out.stdout, /probe\.txt:1\b/);
 });
 
-test('new projects get a full .gitignore that keeps the Loop record', () => {
+test('new projects get a full .gitignore that keeps the Loop record and ignores Loop/ from server pushes', () => {
     const dir = path.join(temp(), 'gi');
     assert.equal(node([INIT, dir, '--brief', BRIEF]).status, 0);
     const gi = fs.readFileSync(path.join(dir, '.gitignore'), 'utf8');
-    for (const line of ['.env', '!.env.example', '*.pem', 'node_modules/', 'dist/', 'coverage/', 'test-results/', '.DS_Store', '__pycache__/']) {
+    for (const line of ['.env', '!.env.example', '*.pem', 'node_modules/', 'dist/', 'coverage/', 'test-results/', '.DS_Store', '__pycache__/', 'Loop/']) {
         assert.ok(gi.split('\n').includes(line), `${line} is ignored`);
     }
-    for (const kept of ['.loop/', 'docs/app-map/', 'design/', 'Loop/', 'HANDOFF.md', 'AGENTS.md']) {
+    for (const kept of ['.loop/', 'docs/app-map/', 'design/', 'HANDOFF.md', 'AGENTS.md']) {
         assert.ok(!gi.split('\n').includes(kept), `${kept} is not ignored`);
     }
 });

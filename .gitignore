@@ -1,0 +1,23 @@
+# Loop repository .gitignore
+# Keep repository clean
+
+.DS_Store
+._*
+Thumbs.db
+
+# OS / Editor
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Dependencies & temporary caches
+node_modules/
+__pycache__/
+*.py[cod]
+.cache/
+*.log
+*.tmp
+*.bak
+_to_delete/
+*.tgz

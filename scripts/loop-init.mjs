@@ -56,6 +56,15 @@ function write(relative, content) {
     return true;
 }
 const copy = (from, to) => write(to, fs.readFileSync(from, 'utf8'));
+const copyTree = (fromDir, toDir) => {
+    if (!fs.existsSync(fromDir)) return;
+    for (const entry of fs.readdirSync(fromDir, { withFileTypes: true })) {
+        const src = path.join(fromDir, entry.name);
+        const rel = path.join(toDir, entry.name);
+        if (entry.isDirectory()) copyTree(src, rel);
+        else copy(src, rel);
+    }
+};
 const run = (cmd, args, opts = {}) => execFileSync(cmd, args, { cwd: target, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...opts });
 
 // ── brief ───────────────────────────────────────────────────────────────────
@@ -405,6 +414,7 @@ async function main() {
 
     // Loop policy copy (project-local, like Lite's Loop/ folder)
     for (const doc of LOOP_DOCS) if (fs.existsSync(path.join(LOOP_ROOT, doc))) copy(path.join(LOOP_ROOT, doc), path.join('Loop', doc));
+    copyTree(path.join(LOOP_ROOT, 'skills'), 'Loop/skills');
     write('Loop/README.md', `# Loop (project copy)\n\nCopied from Loop ${LOOP_VERSION} on ${today}. Start with \`../AGENTS.md\`, then \`loop.md\` and \`ATLAS-FIRST.md\`. This copy may be newer or older than the installed Loop plugin; it governs this project.\n`);
 
     // Atlas tools

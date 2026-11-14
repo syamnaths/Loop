@@ -6,11 +6,14 @@ Status: default for all work in this project. Platform: {{platform}} (`.loop/pla
 
 ```text
 next planned map ({{cmdNext}})
+  -> trigger task skills (design-inspiration, frontend-design, impeccable, ui-ux-pro-max, web-design)
+  -> synthesize virtual moodboard (99.9% target fidelity)
   -> make the map exact, status: building
   -> compact task packet (objective, files, map, acceptance checks)
   -> branch or worktree when the change is substantial or risky
   -> build to the map with behaviour tests ({{projectTest}})
   -> prove it at the strongest level in .loop/platform.md
+  -> audit against AI slop (ai-slop-detector)
   -> scope review, then quality / risk review
   -> map delivered with source refs, track + fix queue + handoff updated
   -> validated checkpoint commit

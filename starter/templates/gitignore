@@ -1,5 +1,5 @@
 # Loop project .gitignore (platform lines are added below by loop-init.mjs)
-# Keep: .loop/, docs/app-map/, design/, Loop/, HANDOFF.md, AGENTS.md (they are the project record)
+# Keep: .loop/, docs/app-map/, design/, HANDOFF.md, AGENTS.md (they are the project record)
 
 # Secrets and keys — never commit
 .env
@@ -72,6 +72,7 @@ Desktop.ini
 *.db
 uploads/
 
-# Loop local-only files
+# Loop local-only files (never push Loop framework files to the server)
+Loop/
 handoff-archive/*.tmp
 .loop/*.local.md

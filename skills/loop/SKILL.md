@@ -36,7 +36,7 @@ Read `AGENTS.md`, `HANDOFF.md` (CURRENT RESUME only), `.loop/platform.md`, then 
 ## Build loop (one map at a time)
 
 0. **Trigger task-specific skills based on the job being done:**
-   - **UI / Frontend:** Trigger `skills/frontend-design/`, `skills/impeccable/`, `skills/ui-ux-pro-max/`, and `skills/web-design/` before writing components or CSS.
+   - **UI / Frontend:** Trigger `skills/design-inspiration/` (query Awwwards-MCP / InspoMCP / Responsively), synthesize a virtual moodboard targeting 99.9% fidelity, apply core styling (`skills/frontend-design/`, `skills/impeccable/`, `skills/ui-ux-pro-max/`, `skills/web-design/`), and run `skills/ai-slop-detector/` before delivery.
    - **Atlas map update:** Trigger `ATLAS-FIRST.md` rules whenever behaviour changes (`planned` → `building` before code, `delivered` with exact `file:line` refs after checks).
    - **Handoff update:** Trigger `HANDOFF.md` and `loop.md` §9 rules, updating the active `CURRENT RESUME` block in place after every milestone, pause, or switch.
    - **High-risk reviews:** Trigger specialist review personas (`DELIVERY-WORKFLOW.md`, `agency-agents`).
