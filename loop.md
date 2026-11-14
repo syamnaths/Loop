@@ -46,7 +46,11 @@ Do not restart discovery. Read the newest request, `AGENTS.md`, the `CURRENT RES
 
 1. State the outcome, the files and maps involved, and how it will be checked.
 2. Read only the context needed: handoff, affected maps, targeted source ranges.
-3. Pick the cheapest safe execution mode ([EFFICIENT-WORKFLOW.md](./EFFICIENT-WORKFLOW.md)).
+3. Pick the cheapest safe execution mode ([EFFICIENT-WORKFLOW.md](./EFFICIENT-WORKFLOW.md)) and activate task-specific skills based on the job being done:
+   - **Frontend / Visual / UI Work:** Trigger the design skills (`skills/frontend-design/`, `skills/impeccable/`, `skills/ui-ux-pro-max/`, `skills/web-design/`) *before* writing markup or styles.
+   - **Atlas map creation or modification:** Trigger the atlas rules (`ATLAS-FIRST.md`), edit `docs/app-map/atlas-data.mjs` first (`planned` → `building`), and run the atlas builder/check.
+   - **Handoff or resume boundary:** Trigger the handoff rules (section 9, `HANDOFF.md`), updating the single `CURRENT RESUME` block in place before pausing or closing the task.
+   - **High-risk reviews or specialist tasks:** Trigger the specialist persona skills ([agency-agents](https://github.com/msitarzewski/agency-agents)).
 4. Update the map first when behaviour will change (`planned`/`building`).
 5. Make the smallest coherent change. For bugs: reproduce, test one hypothesis at a time; after three failed hypotheses, stop and question the assumptions.
 6. Review scope first, then correctness, accessibility, privacy, security, legal and performance. If the change collects data, adds cookies or trackers, an API, a package, assets, AI content, payments, advice or marketing text, update the matching rows of `.loop/legal-checklist.md` ([LEGAL-CHECKLIST.md](./LEGAL-CHECKLIST.md)).

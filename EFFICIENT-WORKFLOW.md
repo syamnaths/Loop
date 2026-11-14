@@ -6,7 +6,11 @@ Purpose: reduce repeated context, investigation and rework while preserving corr
 
 1. Capture objective, relevant context, constraints and acceptance criteria. Infer clear details; ask only about material ambiguity. Separate requested work from optional improvements.
 2. Read current instructions and the active handoff first; find relevant source/tests through targeted search and the existing map. Confirm baseline and preserve unrelated work.
-3. Classify the bounded task once. Choose direct execution, deterministic tooling or one justified model dispatch. Reuse that decision until scope/capability changes.
+3. Classify the bounded task once and trigger matching skills:
+   - **Visual/UI tasks:** Trigger front-end design skills (`skills/frontend-design/`, `skills/impeccable/`, `skills/ui-ux-pro-max/`, `skills/web-design/`) before implementation.
+   - **Flow atlas updates:** Trigger `ATLAS-FIRST.md` rules; keep `atlas-data.mjs` synchronized with behaviour (`planned` → `building` → `delivered`).
+   - **Continuity & pauses:** Trigger `HANDOFF.md` updates; maintain the single `CURRENT RESUME` block.
+   Choose direct execution, deterministic tooling or one justified model dispatch. Reuse that decision until scope/capability changes.
 4. For a bug, collect evidence and test one hypothesis. Add a regression test when practical, then implement the smallest fix. After three failed hypotheses, reassess rather than stack speculative changes.
 5. Run fresh targeted checks after edits and the complete applicable release checks before publication. Inspect failures/stderr, review spec compliance and then quality/risk.
 6. Update affected maps and the active handoff. Report result, evidence level, unresolved risks and the exact next action briefly. External publication still needs explicit approval.

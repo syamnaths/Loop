@@ -35,6 +35,11 @@ Read `AGENTS.md`, `HANDOFF.md` (CURRENT RESUME only), `.loop/platform.md`, then 
 
 ## Build loop (one map at a time)
 
+0. **Trigger task-specific skills based on the job being done:**
+   - **UI / Frontend:** Trigger `skills/frontend-design/`, `skills/impeccable/`, `skills/ui-ux-pro-max/`, and `skills/web-design/` before writing components or CSS.
+   - **Atlas map update:** Trigger `ATLAS-FIRST.md` rules whenever behaviour changes (`planned` → `building` before code, `delivered` with exact `file:line` refs after checks).
+   - **Handoff update:** Trigger `HANDOFF.md` and `loop.md` §9 rules, updating the active `CURRENT RESUME` block in place after every milestone, pause, or switch.
+   - **High-risk reviews:** Trigger specialist review personas (`DELIVERY-WORKFLOW.md`, `agency-agents`).
 1. The atlas next command → the single ready active map, or the first dependency-ready map in `meta.buildOrder`, and its track. Resolve invalid plans or checkpoint blocked active work before choosing another map.
 2. Confirm the map's steps are still right; edit the map first if not (`planned` → `building`).
 3. Follow TDD for that map's testable behaviour: confirm RED, implement GREEN, then refactor. Reuse coverage; unit-test changed logic and integration-test changed boundaries, including applicable failure paths (DELIVERY-WORKFLOW.md). Record mocks, blocked checks and not-applicable levels.
