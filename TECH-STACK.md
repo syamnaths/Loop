@@ -210,7 +210,7 @@ Required validation is proportional to the application profile:
 
 ### Local-first headless Playwright standard
 
-Codex may invoke Playwright automatically whenever browser behavior, browser protocol behavior, accessibility behavior, responsive behavior, or a browser release gate is relevant. A separate manual trigger is not required. Tests run against the local target application and local supporting services with disposable local data.
+The agent may invoke Playwright automatically whenever browser behavior, browser protocol behavior, accessibility behavior, responsive behavior, or a browser release gate is relevant. A separate manual trigger is not required. Tests run against the local target application and local supporting services with disposable local data.
 
 Use:
 

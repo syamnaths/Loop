@@ -11,8 +11,8 @@
 //   node scripts/loop-init.mjs <target> --brief START.md|brief.json [--platform web,android] [--git] [--start]
 //   node scripts/loop-init.mjs <target>                      (uses <target>/START.md, else asks questions)
 //
-// --start hands over to the coding agent right away (LOOP_AGENT, default
-// "codex") with: Use Loop for this project. Build the next atlas map.
+// --start hands over to the configured coding agent (LOOP_AGENT, e.g. claude,
+// codex, gemini, agy) with: Use Loop for this project. Build the next atlas map.
 // A template page (brief "templatePage", or a template-page/ folder next to
 // START.md) is moved to design/template-page/ and every screen follows it.
 //   node scripts/loop-init.mjs <existing-project> --adopt [--platform ...] [--name ...]
@@ -30,10 +30,18 @@ import { PLATFORMS, PLATFORM_IDS, parsePlatforms, detectPlatforms, platformProfi
 
 const LOOP_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const STARTER = path.join(LOOP_ROOT, 'starter');
-const LOOP_VERSION = JSON.parse(fs.readFileSync(path.join(LOOP_ROOT, '.codex-plugin/plugin.json'), 'utf8')).version;
+const readLoopVersion = () => {
+    const changelogPath = path.join(LOOP_ROOT, 'CHANGELOG.md');
+    if (fs.existsSync(changelogPath)) {
+        const match = fs.readFileSync(changelogPath, 'utf8').match(/^##\s+(\d+\.\d+\.\d+)/m);
+        if (match) return match[1];
+    }
+    return 'local';
+};
+const LOOP_VERSION = readLoopVersion();
 const START_FILES = ['START.md', 'template-page', '.DS_Store', '.git'];
 export const KICKOFF = 'Use Loop for this project. Build the next atlas map.';
-const LOOP_DOCS = ['loop.md', 'ATLAS-FIRST.md', 'OWNER-COMMUNICATION.md', 'EFFICIENT-WORKFLOW.md', 'DELIVERY-WORKFLOW.md', 'SECURITY.md', 'LEGAL-CHECKLIST.md'];
+const LOOP_DOCS = ['loop.md', 'ATLAS-FIRST.md', 'OWNER-COMMUNICATION.md', 'EFFICIENT-WORKFLOW.md', 'DELIVERY-WORKFLOW.md', 'SECURITY.md', 'LEGAL-CHECKLIST.md', 'MODEL-ROUTING.md', 'LOCAL-MODEL-ROUTING.md'];
 
 // ── arguments (read in main) ────────────────────────────────────────────────
 let argv = [];
@@ -489,11 +497,15 @@ async function main() {
     if (brief.templatePage) console.log(`Template page: ${brief.templatePage}`);
     console.log('\nOpen docs/app-map/index.html to see the plan.');
     if (flag('--start')) {
-        // Hand over to the coding agent so building starts straight away.
-        const agent = process.env.LOOP_AGENT || 'codex';
-        console.log(`\nStarting ${agent} in ${target}: "${KICKOFF}"`);
-        const started = spawnSync(agent, [KICKOFF], { cwd: target, stdio: 'inherit' });
-        if (started.error) console.log(`Could not start ${agent} (${started.error.code || started.error.message}). Open the project in your agent and say: ${KICKOFF}`);
+        // Hand over to the configured coding agent so building starts straight away.
+        const agent = process.env.LOOP_AGENT;
+        if (!agent) {
+            console.log(`\nSet LOOP_AGENT=<your-agent-cli> (for example claude, codex, gemini, agy) to auto-launch, or open the project in your agent and say: ${KICKOFF}`);
+        } else {
+            console.log(`\nStarting ${agent} in ${target}: "${KICKOFF}"`);
+            const started = spawnSync(agent, [KICKOFF], { cwd: target, stdio: 'inherit' });
+            if (started.error) console.log(`Could not start ${agent} (${started.error.code || started.error.message}). Open the project in your agent and say: ${KICKOFF}`);
+        }
     } else {
         console.log(`Start building: open the project in your agent and say: ${KICKOFF}\n(Or run again next time with --start to hand over automatically.)`);
     }

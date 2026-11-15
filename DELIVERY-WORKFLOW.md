@@ -1,6 +1,6 @@
 # Loop Delivery Workflow
 
-This document defines the durable specification, implementation, review, debugging, and recovery lifecycle used by the Loop plugin. It applies to new and existing projects and complements `loop.md` rather than replacing its safety, context, testing, routing, and handoff rules.
+This document defines the durable specification, implementation, review, debugging, and recovery lifecycle used by Loop. It applies to new and existing projects across any coding agent or IDE and complements `loop.md` rather than replacing its safety, context, testing, routing, and handoff rules.
 
 ## Durable work tracks
 
@@ -105,16 +105,19 @@ Use a Git branch or worktree when the task is substantial, parallel, experimenta
 - Run setup and a clean baseline test in the isolated workspace.
 - Keep generated dependencies and secrets out of commits.
 
-Do not force worktrees for tiny changes or environments where they increase risk. Merging, publishing, deleting a branch/worktree, or modifying remote state remains approval-gated.
+Do not force worktrees for tiny changes or environments where they increase risk. Before merging any isolated branch or subagent diff, verify contract compatibility (*Samartha* `2.1.1`) and boundary seams (*Sandhi*: API schemas, i18n keys/placeholders, version/cache pins). Merging, publishing, deleting a branch/worktree, or modifying remote state remains approval-gated.
 
-## Two-stage review
+## Two-stage review & agent calling order
+
+When sub-agents or routed workers are used, enforce this calling order:
+**Coordinator** (owns atlas, track, handoff) → **Bounded Worker** (isolated implementation/diff, `[LOOP_ROUTED_CHILD]`) → **Reviewers** (in two stages below) → **Coordinator Integration** (verifies actual diff and test output).
 
 Review in this order:
 
 1. `SPEC_COMPLIANCE` — required behavior, acceptance criteria, scope, exclusions, and evidence.
 2. `QUALITY_AND_RISK` — correctness, maintainability, security, privacy, legal (the trigger table in `LEGAL-CHECKLIST.md`), performance, accessibility, operations, and tests.
 
-Approve a change when it clearly improves the code and meets the spec, even if it is not perfect; polish goes to the fix queue. Critical or high-severity findings block completion. Record medium and low findings with disposition. A model or sub-agent report is advisory evidence; the supervisor verifies the actual diff, files, and test output.
+Approve a change when it clearly improves the code and meets the spec, even if it is not perfect; polish goes to the fix queue (*Tripādī* `8.2.1` one-way finalization: minor findings do not reopen earlier discovery/design loops). Critical or high-severity findings block completion. Record medium and low findings with disposition. A model or sub-agent report is advisory evidence; the supervisor verifies the actual diff, files, and test output.
 
 ### Receiving review
 

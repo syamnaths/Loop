@@ -1,4 +1,4 @@
-# Codex Model Routing Policy
+# Model Routing Policy
 
 This document defines the model-router architecture for Loop-based work. The router analyzes each bounded task request, selects the least-cost model that can satisfy its requirements, dispatches the request, validates the result, and applies a bounded fallback when necessary. It is provider-neutral: a remote model gateway, an OpenAI-compatible client, a local llamafile runtime, or another model adapter may implement the dispatch boundary.
 
@@ -6,11 +6,13 @@ For local or offline execution, apply [`LOCAL-MODEL-ROUTING.md`](./LOCAL-MODEL-R
 
 ## Boundary
 
-The routing layer may classify a task, select a compatible model, check current availability and usage signals, record the decision, and launch or resume a separate Codex session with the selected model when the environment supports it.
+The routing layer may classify a task, select a compatible model, check current availability and usage signals, record the decision, and launch or resume a separate child session with the selected model when the host environment supports it.
 
-The routing unit is the smallest meaningful bounded task, not the entire feature. A complex feature may be decomposed into simple, standard, reasoning, browser, and high-risk subtasks, each routed independently. If a new session is required, preserve the project root, task scope, approvals, and handoff context. A user-selected model or explicit model request takes precedence over automatic routing.
+The routing unit is the smallest meaningful bounded task, not the entire feature. A complex feature may be decomposed into simple, standard, reasoning, browser, and high-risk subtasks, each routed independently. If a new session is required, preserve the project root, task scope, approvals, and handoff context. A user-selected model or explicit model request takes precedence over automatic routing (SOI: specific overrides general).
 
-The router cannot silently replace the model inside the currently executing Codex turn. Loop therefore includes an internal launch adapter, `scripts/codex_model_router.py`, that starts a model-specific bounded child with `codex exec`, `codex exec fork`, or `codex exec resume`. The supervising turn remains on its original model and integrates the child result. Automatic routing is proven only when the adapter returns a successful child result and the local decision record names the actual selected model.
+The router cannot silently replace the model inside the currently executing turn. When the host supports subagents or CLI child launches (for example via host-native subagents, or the optional Codex CLI adapter `scripts/codex_model_router.py`), Loop starts a model-specific bounded child (`[LOOP_ROUTED_CHILD]`) while the supervising turn remains on its original model and integrates the child result. Automatic routing is proven only when the adapter or host returns a successful child result and the local decision record names the actual selected model.
+
+**Agent calling trigger & order:** Stay `direct` when the current model meets capability and context bounds. Trigger a child dispatch only when a subtask has distinct ownership, needs a different capability/context tier, or is an independent specialist review—following **Coordinator → Bounded Worker → Reviewers (`SPEC_COMPLIANCE`, then `QUALITY_AND_RISK`) → Coordinator Integration**.
 
 Human-in-the-loop selection is the required final fallback when automatic switching is unsupported or exhausted. Loop performs the analysis and recommendation; the engineer performs only the host-controlled model change. This preserves useful routing even when the host does not expose a programmable model-switch adapter.
 
@@ -121,9 +123,9 @@ ModelAdapter
 
 A gateway such as OpenRouter may implement the remote adapter and route among remote providers. A llamafile process implements the local adapter. The Loop router still owns task classification, local-first preference, safety requirements, fallback limits, validation, and decision records; the adapter only supplies model access and provider-specific telemetry.
 
-## Bundled Codex launch adapter
+## Optional Codex CLI launch adapter
 
-Loop ships a dependency-free internal adapter at `scripts/codex_model_router.py` and its capability mapping at `config/model-routing.json`. The user does not manually choose a task class or run this script. The workspace default is `--task-class auto`: the adapter reads the bounded task prompt, infers the smallest capable task class, and then applies the configured model and reasoning effort. A supervising Loop session may still pass an explicit task class when it has already decomposed and classified a bounded task.
+For Codex CLI hosts, Loop ships a dependency-free optional adapter at `scripts/codex_model_router.py` and its capability mapping at `config/model-routing.json`. Other hosts (Claude Code, Antigravity, Gemini CLI, Cursor) use their native subagent or model-selector mechanisms with the same task-class and `[LOOP_ROUTED_CHILD]` rules. The user does not manually choose a task class or run this script. The workspace default is `--task-class auto`: the adapter reads the bounded task prompt, infers the smallest capable task class, and then applies the configured model and reasoning effort. A supervising Loop session may still pass an explicit task class when it has already decomposed and classified a bounded task.
 
 The adapter uses the Codex CLI's per-run configuration surface:
 
@@ -140,7 +142,7 @@ codex exec resume --model <model> -c model_reasoning_effort="<effort>" <session>
 - Send the task over stdin so private prompt content is absent from process arguments.
 - Prefix child work with `[LOOP_ROUTED_CHILD]` to prevent recursive routing.
 - Keep the global `~/.codex/config.toml` unchanged. Per-run `--model` and `-c` values override its defaults only for the child invocation.
-- Store compact decisions under `<target>/.codex/loop-routing/`. Records contain a prompt hash, inferred or explicit route, model, effort, attempts, and resume reference—not prompt text or model output.
+- Store compact decisions under `<target>/.loop/routing/`. Records contain a prompt hash, inferred or explicit route, model, effort, attempts, and resume reference—not prompt text or model output.
 - Treat a zero exit status as child dispatch success, not final feature validation. The supervisor still validates and integrates the result.
 
 The default mapping is versioned and dated because model availability changes. Refresh `config/model-routing.json` against the current host-selectable catalog before relying on stale entries. Optional profile templates under `config/codex-profiles/` support human-launched sessions; they are not the live automatic router and must not be copied into `$CODEX_HOME` without approval.

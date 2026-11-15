@@ -1,4 +1,4 @@
-# Loop — project collaboration policy (v0.4.5)
+# Loop — project collaboration policy
 
 Loop is a local-first way to plan, build, check and hand over software with an AI agent and a human owner. Version 0.4 makes the **flow atlas** the centre of every project: new projects start from an atlas plan, and every feature is built to its map and closed by flipping that map to delivered. Loop is **platform-independent**: the platform (web, Android, iPhone, cross-platform mobile, desktop, backend, command-line, other, or several) is chosen by the owner or coder at the start and shapes the proof, rules and release steps. The method comes from the Lite meditation PWA, where it carried dozens of features across five languages without losing track.
 
@@ -29,7 +29,7 @@ Loop asks the questions, then starts building. The questions are the fields of [
 4. **Start.** When the answers cover name, platform and at least one feature, do not wait for another approval: run `node <Loop>/scripts/loop-init.mjs <target> --git`. It reads `START.md`, moves the template page to `design/template-page/`, and creates the atlas plan, a release map for the platform, tracks, `.loop/platform.md`, handoff and an atlas check. Ask again only for answers that are missing or would change what gets built.
 5. **Build straight away.** Show the atlas overview in one line, then run the build loop (ATLAS-FIRST.md) on the first map until it is delivered and proved. Report it with proof, then continue with the next map. Stop only at an approval gate (section 7) or an open product decision.
 
-A coder who prefers the terminal can fill `START.md` by hand, or run `loop-init.mjs <target>` and answer the questions there; `--start` then opens the coding agent (`LOOP_AGENT`, default `codex`) with "Use Loop for this project. Build the next atlas map."
+A coder who prefers the terminal can fill `START.md` by hand, or run `loop-init.mjs <target>` and answer the questions there; `--start` then hands over to the configured coding agent (`LOOP_AGENT`, for example `claude`, `codex`, `gemini`, `agy`) with "Use Loop for this project. Build the next atlas map."
 
 ### Existing project
 
@@ -42,21 +42,36 @@ Do not restart discovery. Read the newest request, `AGENTS.md`, the `CURRENT RES
 - Ask only when the answer changes what gets built. Routine choices are Loop's job; say what was chosen.
 - A withdrawn instruction is dropped completely.
 
-## 3. The checkpoint loop (every meaningful task)
+## 3. Rule resolution, execution order, and checkpoint loop
 
-1. State the outcome, the files and maps involved, and how it will be checked.
-2. Read only the context needed: handoff, affected maps, targeted source ranges.
-3. Pick the cheapest safe execution mode ([EFFICIENT-WORKFLOW.md](./EFFICIENT-WORKFLOW.md)) and activate task-specific skills based on the job being done:
-   - **Frontend / Visual / UI Work:** Trigger inspiration & moodboarding (`skills/design-inspiration/` via Awwwards-MCP / InspoMCP / Responsively), plan to 99.9% fidelity with front-end design skills (`skills/frontend-design/`, `skills/impeccable/`, `skills/ui-ux-pro-max/`, `skills/web-design/`), and audit against AI slop (`skills/ai-slop-detector/`) before delivering.
-   - **Atlas map creation or modification:** Trigger the atlas rules (`ATLAS-FIRST.md`), edit `docs/app-map/atlas-data.mjs` first (`planned` → `building`), and run the atlas builder/check.
-   - **Handoff or resume boundary:** Trigger the handoff rules (section 9, `HANDOFF.md`), updating the single `CURRENT RESUME` block in place before pausing or closing the task.
-   - **High-risk reviews or specialist tasks:** Trigger the specialist persona skills ([agency-agents](https://github.com/msitarzewski/agency-agents)).
-4. Update the map first when behaviour will change (`planned`/`building`).
-5. Make the smallest coherent change. For bugs: reproduce, test one hypothesis at a time; after three failed hypotheses, stop and question the assumptions.
-6. Review scope first, then correctness, accessibility, privacy, security, legal and performance. If the change collects data, adds cookies or trackers, an API, a package, assets, AI content, payments, advice or marketing text, update the matching rows of `.loop/legal-checklist.md` ([LEGAL-CHECKLIST.md](./LEGAL-CHECKLIST.md)).
-7. Run proportionate checks and look at the output. Visual work gets screenshots at the platform's real size (phone browser, emulator, simulator or desktop window).
-8. Close the loop: map to `delivered` with source references, track, fix queue, `HANDOFF.md`, version and cache bumps, commit.
-9. Report to the owner in plain words with what is verified and what is not.
+### Rule resolution (Sūtra 1.4.2 — SOI vs. DOI)
+
+When multiple Loop rules or skills fire at the same time, resolve collisions structurally—never by "later in the document" or ad-hoc patches:
+
+- **Same Operand Interaction (SOI — *utsarga* vs. *apavāda*):** When two rules target the **same operand** (e.g., UI design system, active map, or routing target), the **more specific rule** always wins over the general default (owner's `template-page/` or existing product > platform default; `.loop/platform.md` > generic rule; `[LOOP_ROUTED_CHILD]` > parent routing; `meta.buildOrder` and `blockedBy` > ad-hoc urgency).
+- **Different Operand Interaction (DOI — *vipratiṣedha*, *paraṃ* = right-hand side):** When two rules trigger simultaneously on **different operands** — **left = base** (atlas map, track, source, spec) vs. **right = suffix/attachment** (UI polish, legal rows, security review, routed child, handoff) — the **right-hand attachment resolves on its own operand first** without prematurely mutating or blocking the left base, and then merges into the closed state.
+
+### Canonical execution order & operand trigger attachment
+
+1. **Read state (Hot memory):** `HANDOFF.md` (`CURRENT RESUME`), `.loop/platform.md`, and `atlas-status --next` (never load Cold `archive/` or `handoff-archive/` unless investigating history).
+2. **Lock the left base:** Select the single dependency-ready map (`meta.buildOrder`), confirm its steps, and move `planned` → `building` in `docs/app-map/atlas-data.mjs`. Never trigger domain skills before knowing the active map and its operands.
+3. **Resolve SOI & attach right-side triggers by operand:**
+   | Operand touched | Attached trigger (resolves on its operand before closing the base) |
+   | --- | --- |
+   | **UI / Visual** | `skills/design-inspiration/` → `skills/frontend-design/`, `skills/impeccable/`, `skills/ui-ux-pro-max/`, `skills/web-design/` → `skills/ai-slop-detector/` |
+   | **Data / Auth / API / Payment / Asset** | Matching rows in `.loop/legal-checklist.md` ([LEGAL-CHECKLIST.md](./LEGAL-CHECKLIST.md)) |
+   | **Feature delivery** | Focused security review ([SECURITY.md](./SECURITY.md)) before `delivered` |
+   | **High-risk / Bounded offload** | Cheapest safe execution mode ([EFFICIENT-WORKFLOW.md](./EFFICIENT-WORKFLOW.md) & [MODEL-ROUTING.md](./MODEL-ROUTING.md)) |
+   | **Pause / Switch / Milestone** | Update `CURRENT RESUME` in `HANDOFF.md` in place (section 9) |
+4. **TDD & smallest coherent change:** Confirm RED, implement GREEN, refactor. For bugs: reproduce, test one hypothesis at a time; after three failed hypotheses, stop and question the assumptions.
+5. **Verify & review in order:** Run proportionate checks (unit + integration + visual screenshots at platform sizes). Run `SPEC_COMPLIANCE` before `QUALITY_AND_RISK` / security review.
+6. **Merge & close the base (Tripādī one-way finalization, `8.2.1`):** Finalization runs strictly one-way (`SPEC_COMPLIANCE` → `QUALITY_AND_RISK` / `SECURITY.md` → `delivered` with real `file:line` references → atlas check → track, `FIX-QUEUE.md`, `HANDOFF.md` `CURRENT RESUME`, version/cache bumps → commit). Minor polish discovered in finalization goes to `FIX-QUEUE.md` instead of re-triggering earlier design/discovery loops; only critical/high blockers reopen the base.
+7. **Report to the owner** in plain words with what is verified, evidence level, and what is not.
+
+### Agent calling order & triggers
+
+- **Trigger:** Stay `direct` when the current agent meets capability and context bounds. Dispatch a bounded child (`[LOOP_ROUTED_CHILD]`) or isolated specialist only when a task has distinct ownership, needs a different capability/context tier, or is a high-risk/parallel review. Never spawn recursive dispatches from a child, and never spin up a fleet for a one-file change.
+- **Calling order:** **Coordinator** (owns state, atlas, handoff, integration) → **Bounded Worker** (isolated diff/task) → **Reviewers** (`SPEC_COMPLIANCE`, then `QUALITY_AND_RISK` / `SECURITY` / `ai-slop-detector`) → **Coordinator Integration** (verifies actual diff and test output before closing). If automatic dispatch is unavailable, fall back to `AWAITING_HUMAN_MODEL_SWITCH`.
 
 ### Craft rules for every change
 
@@ -69,7 +84,13 @@ Do not restart discovery. Read the newest request, `AGENTS.md`, the `CURRENT RES
   5. Only then write the smallest code that works.
 - **Never trim the safety net.** Simplicity never removes input checks at trust boundaries, error handling that prevents data loss, security, accessibility or privacy protections.
 - **Mark deliberate shortcuts.** When you knowingly take a simpler route with a limit, leave a short code comment starting `Known limit:` and add a line to `FIX-QUEUE.md`, so it is found later.
-- **Surgical edits.** Before removing or changing odd-looking code, find out why it exists (history, tests, map notes); remove it only when the reason is gone. Touch only the lines the task needs. Do not reformat, rename or refactor nearby code. Remove only what your own change made unused. Note other problems in `FIX-QUEUE.md` instead of fixing them on the side.
+- **Closest-match fallback (*Sthāne 'ntaratamaḥ* `1.1.50`) & literal-vs-meta (*Svaṃ rūpam* `1.1.68`):** When multiple valid options fit, choose the closest match to the existing stack, platform, and capability tier. Never confuse a project's literal domain term with an internal Loop keyword.
+- **Minimal vs. full replacement (`1.1.52`–`1.1.55`):** Default to surgical boundary edits (`alo 'ntyasya`); replace a whole module (`sarvasya`) only when multi-part structural change is required and approved.
+- **Suppressed attachments (`na lumatā 'ṅgasya` `1.1.63`):** When a gate or operand is `n/a` or omitted for the platform (e.g., no UI in a CLI project), skip its dependent downstream transforms rather than forcing inapplicable checks.
+- **Surgical edits & contract-preserving substitution (*Sthānivat* `1.1.56`):** Before removing or changing odd-looking code, find out why it exists (history, tests, map notes); remove it only when the reason is gone. Touch only the lines the task needs. Do not reformat, rename or refactor nearby code. When replacing a module or adapter, preserve its external contract, tests and atlas edges unless a breaking change is approved. Note other problems in `FIX-QUEUE.md` instead of fixing them on the side.
+- **Clean removal (*Lopa* `1.1.60` / `1.1.62`):** Removing dead code or a feature means clean deletion (no commented-out stubs), plus reconciling any downstream callers, tests, locale keys, and atlas edges.
+- **Strip internal markers (*It-lopa* `1.3.9`):** Internal orchestration tags (`[LOOP_ROUTED_CHILD]`, `[LOOP_CLASSIFY]`, internal track notes, debug scaffolds) guide execution and must never leak into user-facing UI, copy, or release bundles.
+- **Seam & compatibility checks (*Samartha* `2.1.1` & *Sandhi*):** Verify contract/type compatibility before merging any isolated branch or subagent diff, and check integration seams (API schemas, i18n keys/placeholders, version/cache pins).
 - **Check the real docs.** For an API, package or platform feature you are not sure about, read its current official documentation or the installed version's source; do not code from memory.
 - **Done means a check passes.** Before coding, turn the task into a check (a test, a command or a screenshot) that fails or is missing now and will pass when the work is right. Loop until it passes.
 

@@ -4,23 +4,23 @@ Purpose: reduce repeated context, investigation and rework while preserving corr
 
 ## Default task loop
 
-1. Capture objective, relevant context, constraints and acceptance criteria. Infer clear details; ask only about material ambiguity. Separate requested work from optional improvements.
-2. Read current instructions and the active handoff first; find relevant source/tests through targeted search and the existing map. Confirm baseline and preserve unrelated work.
-3. Classify the bounded task once and trigger matching skills:
-   - **Visual/UI tasks:** Trigger reference inspiration & moodboarding (`skills/design-inspiration/`), front-end design skills (`skills/frontend-design/`, `skills/impeccable/`, `skills/ui-ux-pro-max/`, `skills/web-design/`) targeting 99.9% moodboard fidelity, and audit against AI slop (`skills/ai-slop-detector/`).
-   - **Flow atlas updates:** Trigger `ATLAS-FIRST.md` rules; keep `atlas-data.mjs` synchronized with behaviour (`planned` → `building` → `delivered`).
-   - **Continuity & pauses:** Trigger `HANDOFF.md` updates; maintain the single `CURRENT RESUME` block.
-   - **High-risk reviews:** Trigger specialist review personas (`DELIVERY-WORKFLOW.md`, `agency-agents`).
-   Choose direct execution, deterministic tooling or one justified model dispatch. Reuse that decision until scope/capability changes.
-4. For a bug, collect evidence and test one hypothesis. Add a regression test when practical, then implement the smallest fix. After three failed hypotheses, reassess rather than stack speculative changes.
-5. Run fresh targeted checks after edits and the complete applicable release checks before publication. Inspect failures/stderr, review spec compliance and then quality/risk.
-6. Update affected maps and the active handoff. Report result, evidence level, unresolved risks and the exact next action briefly. External publication still needs explicit approval.
+1. **Read Hot memory & capture objective:** Read current instructions, the `CURRENT RESUME` block in `HANDOFF.md`, and the active map/track (`atlas-status --next`). Infer clear details; ask only about material ambiguity. Separate requested work from optional improvements.
+2. **Lock the left base:** Confirm baseline, preserve unrelated work, and lock the single active map (`planned` → `building`) before triggering domain skills.
+3. **Resolve SOI & attach right-side triggers by operand:** Apply specific-over-general rules (SOI), then attach only matching triggers for the task's operands (`loop.md` §3):
+   - **UI / Visual:** `skills/design-inspiration/`, `skills/frontend-design/`, `skills/impeccable/`, `skills/ui-ux-pro-max/`, `skills/web-design/`, and `skills/ai-slop-detector/`.
+   - **Data / Auth / API / Payment / Asset:** `.loop/legal-checklist.md`.
+   - **High-risk / Bounded offload:** Choose direct execution, deterministic tooling, or one justified child dispatch (`Coordinator → Bounded Worker → Reviewers → Coordinator Integration`). Reuse that decision until scope/capability changes.
+4. **TDD & smallest coherent fix:** For a bug, collect evidence and test one hypothesis. Add a regression test when practical, then implement the smallest fix. After three failed hypotheses, reassess rather than stack speculative changes.
+5. **Verify & review in order:** Run fresh targeted checks after edits and complete applicable release checks before publication. Inspect failures/stderr, review `SPEC_COMPLIANCE` first and then `QUALITY_AND_RISK` / `SECURITY.md`.
+6. **Merge & close the base:** Update affected maps (`delivered` with `file:line`) and `HANDOFF.md` (`CURRENT RESUME`). Report result, evidence level, unresolved risks and the exact next action briefly. External publication still needs explicit approval.
 
 ## Context and continuity
 
 - Use one coherent outcome per task. Recommend a fresh task at a natural boundary when old context obscures the current work; do not create one without the user's request. Preserve a compact resume packet first. Do not fork merely to reduce context: a fork retains history.
-- Keep `HANDOFF.md` as the active `START` / `MID` / `NOW` snapshot. `NOW` holds current revision/version, approved objective, active files, decisions, fresh evidence, open risks and next action. Do not create a second competing current-state document.
+- Keep `HANDOFF.md` as the active **Hot** memory surface via its single `CURRENT RESUME` block (current revision/version, approved objective, active files, decisions, fresh evidence, open risks and next action). Do not create a second competing current-state document.
+- **Memory tiers:** Keep **Hot** memory minimal (`CURRENT RESUME` + active map + targeted source ranges); store per-feature specs, plans and reviews in **Warm** memory (`.loop/tracks/<id>/`, `FIX-QUEUE.md`); leave **Cold** memory (`handoff-archive/`, `archive/`) unread unless investigating history.
 - When shortening history, preserve original content in the append-only archive and index/corrections scheme from `loop.md`. Never discard unresolved risks, approvals, failures or recovery references. Do not read all archived history for routine tasks.
+- **Pratyāhāra & Ekaśeṣa (compact references, single canonical source):** Define each rule, table, or schema once in its authoritative file and reference it by compact handle instead of duplicating prose lists. Strip internal orchestration markers (`[LOOP_ROUTED_CHILD]`, `[LOOP_CLASSIFY]`) before user-facing output (*It-lopa* `1.3.9`).
 - Load required instruction files fully when activated. Context optimization applies to optional source/history, never to bypassing mandatory instructions. Within an unchanged task, reuse already-read instructions as permitted by the host.
 - Retrieve source ranges, not entire large files. Use maps as navigation hints and verify current source. Limit tool output to relevant excerpts and failure summaries; never feed a full source file back merely because an assertion printed it.
 - Keep required flow-atlas changes in the same implementation checkpoint. Regenerate machine-produced references; do not manually maintain duplicate diagrams.
@@ -32,7 +32,7 @@ Purpose: reduce repeated context, investigation and rework while preserving corr
 - Direct work is appropriate when the current model meets requirements and another run would add no value. Record `executionMode: direct` separately from the adapter's route state; do not invent an adapter `SUCCESS` result. A plan-only call is optional once classification is already clear, not a ritual before every lookup.
 - Use a self-contained `new` child when a compact packet suffices; fork only when retained history is necessary. Delegate before the parent does the same work. Never concurrently resume an active session. Use only the approved adapter for model-specific child runs, with bounded fallback and no recursive dispatch.
 - If a different capability is necessary but dispatch is unavailable, use the existing human-switch checkpoint. Do not silently continue capability-sensitive work under an unsuitable route.
-- Parallelize only independent work with distinct ownership and a clear benefit. No automatic fleet of agents for a one-file change. Count parent work, child work, retries and rework when evaluating savings.
+- **Agent calling trigger & order:** Execute `direct` when the current agent fits capability and context bounds. Trigger a bounded child (`[LOOP_ROUTED_CHILD]`) only when a subtask has distinct ownership, needs a higher/lower capability tier, or is an independent high-risk/UI review. Follow **Coordinator → Bounded Worker → Reviewers (`SPEC_COMPLIANCE`, then `QUALITY_AND_RISK`) → Coordinator Integration**. Parallelize only independent work with distinct ownership and a clear benefit. No automatic fleet of agents for a one-file change. Count parent work, child work, retries and rework when evaluating savings.
 
 ## Deterministic automation first
 

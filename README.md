@@ -12,7 +12,7 @@ For cloud chats without a local Loop installation, paste [Loop — one-page clou
 
 - **Node 18 or later** on your computer. Loop's atlas tools use it. Your app itself can be built with anything.
 - **A coding agent**, for example Codex, Claude Code, Google Antigravity (agy), Gemini CLI or Cursor.
-- **The agent must know where Loop is.** Either install the Codex plugin (see `INSTALL.md`), or add one line to your first message: *"Loop is at ~/Desktop/Ikigai/Loop."*
+- **The agent must know where Loop is.** Either point your agent/host to Loop (see `INSTALL.md`), or add one line to your first message: *"Loop is at ~/Desktop/Ikigai/Loop."*
 
 ### Start a new project (3 ways)
 
@@ -38,7 +38,7 @@ node scripts/loop-init.mjs ~/Desktop/Ikigai/my-app --git --start    # same, then
 node scripts/loop-init.mjs ~/Desktop/Ikigai/my-app --brief my-brief.json --platform android
 ```
 
-`--start` opens Codex by default. `LOOP_AGENT=claude` selects another executable, but this shortcut passes the kickoff as one argument and only works with CLIs that accept that form. For an IDE or a different CLI, open the generated project and paste the kickoff yourself. JSON briefs still work (see `examples/`).
+`--start` hands over to the CLI executable set in `LOOP_AGENT` (for example `LOOP_AGENT=claude`, `codex`, `gemini`, or `agy`). This shortcut passes the kickoff as one argument and only works with CLIs that accept that form. For an IDE or a different CLI, open the generated project and paste the kickoff yourself. JSON briefs still work (see `examples/`).
 
 Generated projects include `AGENTS.md`, `CLAUDE.md` and `GEMINI.md` entry points and shared instructions in `.loop/agent-instructions.md`. These help agents discover Loop; support and instruction loading vary by host. If an agent does not pick them up, ask it: “Read `.loop/agent-instructions.md` and `HANDOFF.md`, then use Loop for this project.” Existing instruction files are preserved during adoption; add that instruction to them yourself if automatic discovery is needed. Keep `AGENTS.md` and `.loop/agent-instructions.md` consistent when changing their shared rules.
 
@@ -139,7 +139,7 @@ Without `--platform`, Loop guesses from the files and tells you. It adds the atl
 | "Target is not empty" | Use an empty folder. Only `START.md` and `template-page/` may be there. For an existing app use `--adopt`. |
 | "START.md is missing: ..." | Fill in the fields it names and run again. |
 | "Atlas build stopped" | A map points to code that does not exist, or has a broken link. The message names the map; fix it and run `atlas` again. |
-| `--start` says it could not start codex | Codex is not installed or not on your PATH. Open the folder in your agent and say "Build the next atlas map." |
+| `--start` says it could not start or `LOOP_AGENT` is unset | Set `LOOP_AGENT=<your-agent-cli>` on your PATH, or open the folder in your agent and say "Build the next atlas map." |
 
 ## Files in this folder
 
@@ -167,4 +167,4 @@ node --test tests/test_loop_init.mjs
 python3 -m unittest tests/test_codex_model_router.py tests/test_efficiency_contract.py
 ```
 
-Install as a Codex plugin: see `INSTALL.md`.
+Setup and host installation notes: see `INSTALL.md`.

@@ -297,7 +297,7 @@ def atomic_json_write(path: Path, data: Dict[str, Any]) -> None:
 
 
 def decision_path(project_root: Path, route_id: str) -> Path:
-    return project_root / ".codex" / "loop-routing" / f"{route_id}.json"
+    return project_root / ".loop" / "routing" / f"{route_id}.json"
 
 
 def read_prompt(prompt_file: Optional[Path]) -> str:
