@@ -49,9 +49,9 @@ Give approve-style options (A recommended / B / C) only for decisions that chang
 
 ## Professional design before delivery
 
-**Think like a front-end designer, not a code generator.** When a map touches a UI/visual operand, apply `Loop/loop.md` ("Professional design before delivery") and the design skills under `skills/` (`design-inspiration` → `frontend-design` / `impeccable` / `ui-ux-pro-max` / `web-design` → `ai-slop-detector`).
+**Think like a front-end designer, not a code generator.** When a map touches a UI/visual operand, apply `Loop/loop.md` ("Professional design before delivery") and the design skills under `skills/` (`design-inspiration` → `modern-web-guidance` (web) / `frontend-design` / `impeccable` / `ui-ux-pro-max` / `web-design` / `astryx` (when chosen) → `ai-slop-detector`).
 
-- **Design-system selection (SOI):** Owner's approved reference or existing product system takes precedence; otherwise default to Material Design 3 (web/Android/cross-platform) or Apple HIG (native iOS/macOS), or platform conventions elsewhere. Obtain owner decision before a major new visual direction.
+- **Design-system selection (SOI):** Owner's approved reference or existing product system takes precedence. If the owner has not taken any action on design yet, ask once with A/B/C options (A: **Astryx** `skills/astryx/SKILL.md`, B: platform-native Material Design 3 / Apple HIG, C: custom/reference) rather than defaulting silently. Obtain owner decision before a major new visual direction.
 - **Full craft & proof:** Include motion defaults with reduced-motion alternatives, all applicable states from `web-design/SKILL.md` §7–8, keyboard/accessibility checks, and inspect rendered screens at representative sizes before delivery (or record visual review as `BLOCKED` if rendering tools are unavailable).
 
 ## Product rules
@@ -65,7 +65,7 @@ Give approve-style options (A recommended / B / C) only for decisions that chang
 
 ## Tests and security before delivery
 
-Follow TDD for testable behavior: confirm a meaningful failing test before implementation, then GREEN and refactor. Reuse existing coverage; add unit tests for changed logic and integration tests for changed component boundaries, with failure paths where applicable. Record skipped or blocked levels honestly (details in Loop/DELIVERY-WORKFLOW.md). Before marking a feature delivered, perform the focused security review in Loop/SECURITY.md, list evidenced vulnerabilities and discuss them with the owner before remediation. Fix agreed findings, rerun tests and re-review. No findings means report limits and continue; no empty approval gate.
+Follow TDD for testable behavior: confirm a meaningful failing test before implementation, then GREEN and refactor. Reuse existing coverage; add unit tests for changed logic and integration tests for changed component boundaries, with failure paths where applicable. Record skipped or blocked levels honestly (details in Loop/DELIVERY-WORKFLOW.md). Before marking a feature delivered, perform the focused security review in Loop/SECURITY.md: auto-fix routine/low/medium findings directly, rerun tests and re-review; stop to discuss with the owner only for critical/high architectural or breaking security trade-offs. Keep building continuously across simple sub-steps until a cohesive page or major feature is complete, then report with proof.
 
 ## Legal checklist
 

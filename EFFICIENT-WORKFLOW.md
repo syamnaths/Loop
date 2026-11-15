@@ -12,7 +12,7 @@ Purpose: reduce repeated context, investigation and rework while preserving corr
    - **High-risk / Bounded offload:** Choose direct execution, deterministic tooling, or one justified child dispatch (`Coordinator → Bounded Worker → Reviewers → Coordinator Integration`). Reuse that decision until scope/capability changes.
 4. **TDD & smallest coherent fix:** For a bug, collect evidence and test one hypothesis. Add a regression test when practical, then implement the smallest fix. After three failed hypotheses, reassess rather than stack speculative changes.
 5. **Verify & review in order:** Run fresh targeted checks after edits and complete applicable release checks before publication. Inspect failures/stderr, review `SPEC_COMPLIANCE` first and then `QUALITY_AND_RISK` / `SECURITY.md`.
-6. **Merge & close the base:** Update affected maps (`delivered` with `file:line`) and `HANDOFF.md` (`CURRENT RESUME`). Report result, evidence level, unresolved risks and the exact next action briefly. External publication still needs explicit approval.
+6. **Merge & close the base (continuous page/major-feature flow):** Update affected maps (`delivered` with `file:line`) and `HANDOFF.md` (`CURRENT RESUME`). Do not stop on simple steps, routine boilerplate, or fast-track (`Caveman`) edits where inapplicable gates are skipped (`na lumatā 'ṅgasya` `1.1.63`). Batch work through full **pages or major features**, then report result, evidence level, unresolved risks and the exact next action briefly. External publication still needs explicit approval.
 
 ## Context and continuity
 
