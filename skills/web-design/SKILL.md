@@ -60,16 +60,46 @@ Every interactive element must express clear states:
 - **Fluid Layouts:** Use CSS Grid and Flexbox with `clamp()`, `minmax()`, and modern container queries rather than brittle hardcoded pixel widths.
 
 ### 7. Form Craft & Input Design
-- Labels must remain visible (avoid placeholder-only forms).
-- Inputs should have clear border states on focus and real-time inline validation with helpful, human messages.
-- Numeric inputs, date pickers, and masks should leverage appropriate HTML5 attributes (`inputmode`, `autocomplete`, `type`).
+- **Placeholders & Helper Text:** Show expected formatting (e.g. date formats, password rules) inside or below inputs. Never rely on placeholder text alone as a field label—labels must remain visible.
+- **Focus & Active States:** Highlight the currently selected input box clearly so keyboard and mobile users know where they are typing.
+- **Inline Validation:** Show green checkmarks for valid entries and clear red error messages right below invalid fields. Validate after the user finishes typing (on blur/pause) rather than on every keystroke.
+- **Disabled States:** Visually mute buttons or inputs that cannot be used yet and add a tooltip explaining what needs to happen to enable them.
+- **Unsaved Changes Warning:** Trigger a confirmation popup if a user tries to close a tab or navigate away after editing a form.
+- **Native Attributes:** Numeric inputs, date pickers, and masks should leverage appropriate HTML5 attributes (`inputmode`, `autocomplete`, `type`).
 
-### 8. Visual Proof & Self-Audit Checklist
+### 8. Complete Screen, System & Feedback States
+Every user-facing feature must explicitly design and handle all applicable states below:
+
+1. **Core Screen & Data States** (every page or component that fetches or displays data):
+   - **Empty State:** Shown when a user has no data yet (e.g. empty cart, new dashboard); include a friendly explanation and a clear call-to-action to add the first item.
+   - **Loading State (Skeletons & Spinners):** Use skeleton screens (gray placeholder shapes, CLS = 0) for page layouts and spinners for small actions like button clicks.
+   - **Ideal State:** The standard view when data is loaded, populated, and functioning normally.
+   - **Partial State:** Shown when only some data is available (e.g. incomplete user profile); gently prompt the user to fill in the missing pieces.
+   - **Overflow / Max State:** Shown when content exceeds normal limits (e.g. very long usernames, 100+ notifications); use text truncation (ellipses) and pagination or infinite scroll to prevent broken layouts.
+2. **Error & System Pages:**
+   - **404 Not Found:** Include a search bar, popular links, or a button to go back home.
+   - **500 Server Error:** Apologize briefly, reassure the user their data is safe, and provide a "Try Again" button.
+   - **403 Forbidden / Unauthorized:** Explain why access is restricted and offer a login prompt or a way to request access.
+   - **Offline / No Internet Connection:** Display a clear banner, allow viewing cached content if possible, and auto-retry when the connection returns.
+   - **Maintenance Mode:** State when the service will be back online and offer a status page link.
+   - **Session Timeout:** Save any unsaved work locally if possible and provide a quick re-login modal.
+3. **Feedback & Micro-Interactions:**
+   - **Toast Notifications / Snackbars:** Brief popups confirming background actions (e.g. "Message sent", "Item deleted"); include an "Undo" button for destructive actions.
+   - **Confirmation Modals:** Ask for explicit confirmation before permanent actions (e.g. deleting an account, canceling a subscription).
+   - **Progress Indicators:** Show step-by-step progress bars for multi-page checkouts, onboarding flows, or file uploads.
+   - **Hover & Pressed States:** Provide subtle color or shadow changes when hovering over clickable elements or tapping buttons on mobile.
+4. **First-Time & Accessibility States:**
+   - **Onboarding / Walkthroughs:** Brief tooltips or welcome screens guiding new users through core features without overwhelming them.
+   - **Search No Results:** Suggest spelling corrections, broader keywords, or popular categories when a search query returns zero matches.
+   - **Keyboard Navigation & Focus Rings:** Ensure every interactive element can be reached using the `Tab` key with a visible outline around the focused item.
+   - **Image Fallbacks:** Display a default avatar or broken-image icon if a user-uploaded photo fails to load.
+
+### 9. Visual Proof & Self-Audit Checklist
 Before declaring any front-end UI delivered or complete:
 - [ ] Did I inspect the rendered output across mobile (375px), tablet (768px), and desktop (1280px+)?
-- [ ] Is there zero horizontal scroll overflow?
+- [ ] Is there zero horizontal scroll overflow, and are long values/lists handled with truncation and pagination or infinite scroll?
 - [ ] Are all font sizes, weights, and colors pulled from a coherent token system?
-- [ ] Do all buttons, links, and inputs have hover, focus, and active states?
+- [ ] Do all buttons, links, and inputs have hover, focus-visible, active/pressed, and disabled-with-tooltip states?
 - [ ] Is contrast verified for text against its direct background?
-- [ ] Does keyboard navigation (`Tab`, `Enter`, `Escape`) work seamlessly?
-- [ ] Are empty states and error boundaries visually handled?
+- [ ] Does keyboard navigation (`Tab`, `Enter`, `Escape`) work seamlessly with visible focus rings?
+- [ ] Are all 5 core data states (empty, loading skeletons/spinners, ideal, partial, overflow), system/error pages (404, 500, 403, offline, maintenance, session timeout), form states (helper text, post-typing inline validation, unsaved changes warning), feedback states (toasts with undo, confirmation modals, progress indicators), and first-time/fallback states (onboarding, search no results, image fallbacks) handled where applicable?

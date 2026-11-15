@@ -36,5 +36,5 @@ Before approving code or visuals, verify against this scorecard:
 - [ ] **No Cliché Gradients:** Are color palettes bespoke and anchored in semantic tokens rather than lazy default gradients?
 - [ ] **Zero Dead Plumbing:** Are all handlers, buttons, and state hooks connected to actual logic, APIs, or genuine state transitions?
 - [ ] **No Fake Microcopy:** Are labels, buttons, and descriptions realistic, domain-specific, and human-written?
-- [ ] **Real States Built:** Are loading skeletons, error boundaries, empty states, and validation messages fully coded and tested?
+- [ ] **Real States Built:** Are all applicable states from `skills/web-design/SKILL.md` (§7–8) coded and tested—core data states (empty, loading skeletons/spinners, ideal, partial, overflow), error/system pages (404, 500, 403, offline, maintenance, session timeout), form states (helper text, post-typing validation, disabled tooltips, unsaved changes warning), feedback (toasts with undo, confirmation modals, progress, hover/pressed), and first-time/accessibility (onboarding, search no results, keyboard focus rings, image fallbacks)?
 - [ ] **Clean Codebase:** Are redundant AI commentary, hallucinated imports, and abandoned boilerplate stripped?
